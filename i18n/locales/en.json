@@ -5,7 +5,8 @@
     "news": "News",
     "indicators": "Indicators",
     "settings": "Settings",
-    "login": "Login"
+    "login": "Login",
+    "logout": "Logout"
   },
   "home": {
     "community": "Community",
@@ -28,9 +29,9 @@
     "stocks": "stocks"
   },
   "search": {
-    "placeholder": "Search stocks... (e.g. BBCA, Bank Central Asia)",
-    "noResults": "No stocks found.",
-    "heading": "Stocks"
+    "placeholder": "Search news...",
+    "noResults": "No articles found.",
+    "heading": "News"
   },
   "stock": {
     "back": "Back",
@@ -111,6 +112,7 @@
     "passwordPlaceholder": "Enter your password",
     "signIn": "Sign in",
     "signingIn": "Signing in...",
+    "invalidCredentials": "Invalid email or password.",
     "noAccount": "Don't have an account?",
     "register": "Register",
     "createAccount": "Create account",

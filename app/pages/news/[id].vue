@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ArrowLeft, Clock, ExternalLink } from 'lucide-vue-next'
 import { useNews } from '@/composables/useNews'
+import { newsContent } from '@/data/news-content'
 import { timeAgo } from '@/lib/utils'
 
 const route = useRoute()
@@ -48,7 +49,7 @@ if (!article.value) {
     <!-- Content -->
     <div class="prose prose-sm prose-invert max-w-none">
       <p
-        v-for="(paragraph, i) in article.content.split('\n\n')"
+        v-for="(paragraph, i) in (newsContent[articleId] ?? '').split('\n\n')"
         :key="i"
         class="mb-4 text-sm leading-relaxed text-foreground/80"
       >

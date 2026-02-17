@@ -1,20 +1,36 @@
 <script setup lang="ts">
-import { Home, Star, Newspaper, BarChart3 } from 'lucide-vue-next'
+import { Home, Newspaper, LogIn } from 'lucide-vue-next'
 
 const { t } = useI18n()
 const route = useRoute()
+const localePath = useLocalePath()
+const userStore = useUserStore()
 
 const navItems = computed(() => [
   { label: t('nav.home'), icon: Home, to: '/' },
-  { label: t('nav.watchlist'), icon: Star, to: '/watchlist' },
   { label: t('nav.news'), icon: Newspaper, to: '/news' },
-  { label: t('nav.indicators'), icon: BarChart3, to: '/indicators' },
 ])
 
 const isActive = (to: string) => {
-  if (to === '/') return route.path === '/'
-  return route.path.startsWith(to)
+  const path = route.path.replace(/^\/(id|en)/, '') || '/'
+  if (to === '/') return path === '/'
+  return path.startsWith(to)
 }
+
+const isProfileActive = computed(() => {
+  const path = route.path.replace(/^\/(id|en)/, '') || '/'
+  return path.startsWith('/settings') || path.startsWith('/auth')
+})
+
+const initials = computed(() => {
+  if (!userStore.profile?.name) return '?'
+  return userStore.profile.name
+    .split(' ')
+    .slice(0, 2)
+    .map((w: string) => w[0])
+    .join('')
+    .toUpperCase()
+})
 </script>
 
 <template>
@@ -23,7 +39,8 @@ const isActive = (to: string) => {
       <NuxtLink
         v-for="item in navItems"
         :key="item.to"
-        :to="item.to"
+        :to="localePath(item.to)"
+        :title="item.label"
         class="flex min-w-[64px] flex-col items-center gap-0.5 rounded-lg px-3 py-1.5 transition-colors"
         :class="isActive(item.to) ? 'text-blue-500' : 'text-muted-foreground hover:text-foreground'"
       >
@@ -33,10 +50,40 @@ const isActive = (to: string) => {
           :class="isActive(item.to) && 'scale-110'"
         />
         <span class="text-[10px] font-medium">{{ item.label }}</span>
+        <div v-if="isActive(item.to)" class="mt-0.5 h-0.5 w-4 rounded-full bg-blue-500" />
+      </NuxtLink>
+
+      <!-- Profile (logged in) -->
+      <NuxtLink
+        v-if="userStore.isLoggedIn"
+        :to="localePath('/settings')"
+        :title="userStore.profile!.name"
+        class="flex min-w-[64px] flex-col items-center gap-0.5 rounded-lg px-3 py-1.5 transition-colors"
+        :class="isProfileActive ? 'text-blue-500' : 'text-muted-foreground hover:text-foreground'"
+      >
         <div
-          v-if="isActive(item.to)"
-          class="mt-0.5 h-0.5 w-4 rounded-full bg-blue-500"
-        />
+          class="flex h-5 w-5 items-center justify-center rounded-full text-[9px] font-bold transition-transform"
+          :class="[
+            isProfileActive ? 'bg-blue-500 text-white scale-110' : 'bg-muted text-foreground'
+          ]"
+        >
+          {{ initials }}
+        </div>
+        <span class="text-[10px] font-medium">{{ userStore.profile!.name.split(' ')[0] }}</span>
+        <div v-if="isProfileActive" class="mt-0.5 h-0.5 w-4 rounded-full bg-blue-500" />
+      </NuxtLink>
+
+      <!-- Login (logged out) -->
+      <NuxtLink
+        v-else
+        :to="localePath('/auth/login')"
+        :title="t('nav.login')"
+        class="flex min-w-[64px] flex-col items-center gap-0.5 rounded-lg px-3 py-1.5 transition-colors"
+        :class="isProfileActive ? 'text-blue-500' : 'text-muted-foreground hover:text-foreground'"
+      >
+        <LogIn class="h-5 w-5 transition-transform" :class="isProfileActive && 'scale-110'" />
+        <span class="text-[10px] font-medium">{{ t('nav.login') }}</span>
+        <div v-if="isProfileActive" class="mt-0.5 h-0.5 w-4 rounded-full bg-blue-500" />
       </NuxtLink>
     </div>
   </nav>

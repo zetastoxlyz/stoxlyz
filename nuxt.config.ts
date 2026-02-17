@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     ],
     defaultLocale: 'id',
     langDir: 'locales',
-    strategy: 'no_prefix',
+    strategy: 'prefix_except_default',
     detectBrowserLanguage: false,
   },
 
@@ -48,14 +48,18 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-      ],
-      // Load font async — avoid render-blocking stylesheet chain
-      script: [
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: 'anonymous' },
+        // Non-blocking font load: preload as style, swap to stylesheet on load
         {
-          innerHTML: `(function(){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap';document.head.appendChild(l)})()`,
-          type: 'text/javascript',
+          rel: 'preload',
+          as: 'style',
+          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+          onload: "this.onload=null;this.rel='stylesheet'",
         },
+      ],
+      // <noscript> fallback for browsers with JS disabled
+      noscript: [
+        { innerHTML: '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">' },
       ],
     },
     pageTransition: { name: 'page', mode: 'out-in' },
@@ -63,5 +67,11 @@ export default defineNuxtConfig({
 
   nitro: {
     compressPublicAssets: true,
+    routeRules: {
+      // Allow bfcache on all HTML pages — no no-store
+      '/**': { headers: { 'Cache-Control': 'public, max-age=0, must-revalidate' } },
+      // Static assets can be cached long-term
+      '/_nuxt/**': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
+    },
   },
 })

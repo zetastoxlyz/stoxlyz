@@ -6,17 +6,36 @@ const { t } = useI18n()
 useHead({ title: computed(() => `${t('auth.signIn')} - StoxLyz`) })
 
 const router = useRouter()
+const localePath = useLocalePath()
+const userStore = useUserStore()
 const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
 const loading = ref(false)
+const error = ref('')
+
+const DUMMY_USERS = [
+  { email: 'budi@stoxlyz.id', password: 'password123', name: 'Budi Santoso' },
+  { email: 'demo@stoxlyz.id', password: 'demo123', name: 'Demo User' },
+]
 
 async function handleLogin() {
+  error.value = ''
   loading.value = true
-  // Mock login delay
-  await new Promise(r => setTimeout(r, 800))
+  await new Promise(r => setTimeout(r, 600))
   loading.value = false
-  router.push('/')
+
+  const match = DUMMY_USERS.find(
+    u => u.email === email.value && u.password === password.value
+  )
+
+  if (!match) {
+    error.value = t('auth.invalidCredentials')
+    return
+  }
+
+  userStore.setProfile({ name: match.name, email: match.email })
+  router.push(localePath('/'))
 }
 </script>
 
@@ -62,6 +81,8 @@ async function handleLogin() {
           </Button>
         </div>
       </div>
+
+      <p v-if="error" class="text-sm text-destructive">{{ error }}</p>
 
       <Button type="submit" class="w-full" :disabled="loading">
         {{ loading ? $t('auth.signingIn') : $t('auth.signIn') }}

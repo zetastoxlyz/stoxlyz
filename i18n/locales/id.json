@@ -5,7 +5,8 @@
     "news": "Berita",
     "indicators": "Indikator",
     "settings": "Pengaturan",
-    "login": "Masuk"
+    "login": "Masuk",
+    "logout": "Keluar"
   },
   "home": {
     "community": "Komunitas",
@@ -28,9 +29,9 @@
     "stocks": "saham"
   },
   "search": {
-    "placeholder": "Cari saham... (cth. BBCA, Bank Central Asia)",
-    "noResults": "Saham tidak ditemukan.",
-    "heading": "Saham"
+    "placeholder": "Cari berita...",
+    "noResults": "Artikel tidak ditemukan.",
+    "heading": "Berita"
   },
   "stock": {
     "back": "Kembali",
@@ -111,6 +112,7 @@
     "passwordPlaceholder": "Masukkan kata sandi Anda",
     "signIn": "Masuk",
     "signingIn": "Sedang masuk...",
+    "invalidCredentials": "Email atau kata sandi salah.",
     "noAccount": "Belum punya akun?",
     "register": "Daftar",
     "createAccount": "Buat akun",

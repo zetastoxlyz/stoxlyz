@@ -39,8 +39,6 @@ if (!stock.value) {
       <StockNews :ticker="stock.ticker" />
     </div>
 
-    <SharedRiskDisclaimer />
-
     <!-- FAB: Add to watchlist -->
     <button
       class="fixed bottom-24 right-4 z-40 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all active:scale-95 lg:bottom-8"

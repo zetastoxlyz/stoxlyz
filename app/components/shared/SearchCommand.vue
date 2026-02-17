@@ -1,26 +1,27 @@
 <script setup lang="ts">
-import { Search } from 'lucide-vue-next'
-import { stocks } from '@/data/stocks'
+import { Search, Newspaper } from 'lucide-vue-next'
+import { newsArticles } from '@/data/news'
 
 const { t } = useI18n()
+const localePath = useLocalePath()
 
 const open = defineModel<boolean>('open', { default: false })
 
 const searchQuery = ref('')
 const router = useRouter()
 
-const filteredStocks = computed(() => {
-  if (!searchQuery.value) return stocks.slice(0, 10)
+const filteredNews = computed(() => {
+  if (!searchQuery.value) return newsArticles.slice(0, 8)
   const q = searchQuery.value.toLowerCase()
-  return stocks.filter(
-    s => s.ticker.toLowerCase().includes(q) || s.name.toLowerCase().includes(q)
-  ).slice(0, 10)
+  return newsArticles.filter(
+    n => n.title.toLowerCase().includes(q) || n.summary.toLowerCase().includes(q)
+  ).slice(0, 8)
 })
 
-function selectStock(ticker: string) {
+function selectArticle(id: string) {
   open.value = false
   searchQuery.value = ''
-  router.push(`/stocks/${ticker}`)
+  router.push(localePath(`/news/${id}`))
 }
 
 // Keyboard shortcut
@@ -46,27 +47,16 @@ onMounted(() => {
       <CommandEmpty>{{ $t('search.noResults') }}</CommandEmpty>
       <CommandGroup :heading="$t('search.heading')">
         <CommandItem
-          v-for="stock in filteredStocks"
-          :key="stock.ticker"
-          :value="stock.ticker"
-          class="flex items-center gap-3 cursor-pointer"
-          @select="selectStock(stock.ticker)"
+          v-for="article in filteredNews"
+          :key="article.id"
+          :value="article.id"
+          class="flex cursor-pointer items-start gap-3"
+          @select="selectArticle(article.id)"
         >
-          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-xs font-bold">
-            {{ stock.logo }}
-          </div>
-          <div class="flex-1">
-            <p class="text-sm font-semibold">{{ stock.ticker }}</p>
-            <p class="text-xs text-muted-foreground">{{ stock.name }}</p>
-          </div>
-          <div class="text-right">
-            <p class="text-sm font-medium">{{ stock.price.toLocaleString('id-ID') }}</p>
-            <p
-              class="text-xs"
-              :class="stock.changePercent >= 0 ? 'text-gain' : 'text-loss'"
-            >
-              {{ stock.changePercent >= 0 ? '+' : '' }}{{ stock.changePercent.toFixed(2) }}%
-            </p>
+          <Newspaper class="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+          <div class="flex-1 overflow-hidden">
+            <p class="truncate text-sm font-medium">{{ article.title }}</p>
+            <p class="truncate text-xs text-muted-foreground">{{ article.source }} · {{ article.category }}</p>
           </div>
         </CommandItem>
       </CommandGroup>

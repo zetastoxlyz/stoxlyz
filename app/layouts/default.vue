@@ -3,7 +3,6 @@ const route = useRoute()
 
 const navItems = [
   { label: 'Home', icon: 'Home', to: '/' },
-  { label: 'Watchlist', icon: 'Star', to: '/watchlist' },
   { label: 'News', icon: 'Newspaper', to: '/news' },
   { label: 'Indicators', icon: 'BarChart3', to: '/indicators' },
 ]
