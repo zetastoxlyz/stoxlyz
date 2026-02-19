@@ -1,75 +1,89 @@
-# Nuxt Minimal Starter
+# StoxLyz
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Indonesian stock market information platform for retail investors. A modern, responsive web app built with Nuxt 4 and Vue 3.
 
-## Setup
+> **Demo only** — all data is static/mock. Not a licensed broker or financial advisor.
 
-Make sure to install dependencies:
+## Features
+
+- **Watchlist** — Save and sort favorite stocks, persisted in localStorage
+- **News Feed** — Articles categorized by Market, Stocks, Economy, Education
+- **Economic Indicators** — Indonesian macro data in grid and table views
+- **Authentication** — Dummy login/register flow (localStorage-based)
+- **Theming** — Light, dark, and system modes
+- **i18n** — Bahasa Indonesia (default) and English
+- **Mobile-first** — Bottom nav on mobile, sidebar on desktop
+
+## Tech Stack
+
+| Layer | Library |
+|-------|---------|
+| Framework | Nuxt 4.3 + Vue 3 + TypeScript |
+| Styling | Tailwind CSS v3 + shadcn-vue (New York / zinc) |
+| State | Pinia + localStorage |
+| Icons | Lucide Vue Next |
+| i18n | @nuxtjs/i18n |
+| Deployment | GitHub Pages (static generation) |
+
+## Getting Started
 
 ```bash
-# npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
+npm run dev       # http://localhost:3000
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+Other commands:
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
+npm run build     # Production build
+npm run generate  # Static site → .output/public/
+npm run preview   # Preview production build locally
 ```
 
-## Production
+## Project Structure
 
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+```
+app/
+├── pages/          # File-based routes
+│   ├── index.vue
+│   ├── watchlist.vue
+│   ├── indicators.vue
+│   ├── settings.vue
+│   ├── stocks/[ticker].vue
+│   ├── news/index.vue
+│   ├── news/[id].vue
+│   └── auth/{login,register}.vue
+├── components/     # Auto-imported components
+│   ├── home/       # Dashboard widgets
+│   ├── stock/      # Stock detail sections
+│   ├── watchlist/
+│   ├── news/
+│   ├── indicators/
+│   ├── layout/     # AppHeader, AppSidebar, AppBottomNav
+│   ├── shared/     # Reusable cross-page components
+│   └── ui/         # shadcn-vue primitives
+├── composables/    # useStocks, useNews, useIndicators, useAuth, useSearch
+├── stores/         # watchlist.ts, user.ts
+├── data/           # Static mock data (stocks, news, indicators, sectors)
+└── lib/            # Utility helpers
+i18n/locales/
+├── id.json         # Bahasa Indonesia (default)
+└── en.json         # English
 ```
 
-Locally preview production build:
+## Demo Credentials
 
-```bash
-# npm
-npm run preview
+| Email | Password |
+|-------|----------|
+| `budi@stoxlyz.id` | `password123` |
+| `demo@stoxlyz.id` | `demo123` |
 
-# pnpm
-pnpm preview
+## Deployment
 
-# yarn
-yarn preview
+Automatically deployed to GitHub Pages on every push to `master` via GitHub Actions. The workflow runs `npm run generate` and publishes `.output/public/` to the `gh-pages` environment.
 
-# bun
-bun run preview
-```
+Live URL: `https://<username>.github.io/stocksX/`
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Disclaimer
+
+StoxLyz is a demonstration application. All stock data, prices, and financial figures are **mock data for development purposes only**. This application is **not affiliated with OJK**, IDX, or any licensed financial institution. Do not make investment decisions based on this app.
