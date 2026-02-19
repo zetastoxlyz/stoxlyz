@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+  ssr: false,
 
   modules: [
     '@nuxtjs/tailwindcss',
@@ -38,6 +39,7 @@ export default defineNuxtConfig({
   },
 
   app: {
+    baseURL: '/stocksX/',
     head: {
       title: 'StoxLyz - Indonesian Stock Market',
       htmlAttrs: { lang: 'id' },
