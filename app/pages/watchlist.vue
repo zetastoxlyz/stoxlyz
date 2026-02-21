@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ArrowUpDown } from 'lucide-vue-next'
-import { useWatchlistStore } from '@/stores/watchlist'
-import { useStocks } from '@/composables/useStocks'
+import { useWatchlistStore } from '~/stores/watchlist'
+import { useStocks } from '~/composables/useStocks'
 
 const { t } = useI18n()
 
@@ -63,7 +63,7 @@ const watchedStocks = computed(() => {
         :key="stock.ticker"
         :stock="stock"
         class="stagger-item"
-        @remove="watchlistStore.removeFromWatchlist"
+        @remove="(ticker) => watchlistStore.removeFromWatchlist(ticker)"
       />
     </div>
     <WatchlistEmpty v-else />

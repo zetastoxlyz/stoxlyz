@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Home, Newspaper, Settings, LogIn, LogOut } from 'lucide-vue-next'
+import { Home, Newspaper, Settings, LogIn, LogOut, FlaskConical } from 'lucide-vue-next'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -56,6 +56,18 @@ const initials = computed(() => {
       >
         <Settings class="h-4 w-4" />
         {{ t('nav.settings') }}
+      </NuxtLink>
+
+      <NuxtLink
+        :to="localePath('/demo')"
+        :title="t('nav.demo')"
+        class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+        :class="isActive('/demo')
+          ? 'bg-accent text-accent-foreground'
+          : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground'"
+      >
+        <FlaskConical class="h-4 w-4" />
+        {{ t('nav.demo') }}
       </NuxtLink>
 
       <!-- Logged out: show Login link -->

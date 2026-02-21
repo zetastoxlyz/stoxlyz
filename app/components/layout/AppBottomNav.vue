@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Home, Newspaper, LogIn } from 'lucide-vue-next'
+import { Home, Newspaper, LogIn, FlaskConical } from 'lucide-vue-next'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -9,6 +9,7 @@ const userStore = useUserStore()
 const navItems = computed(() => [
   { label: t('nav.home'), icon: Home, to: '/' },
   { label: t('nav.news'), icon: Newspaper, to: '/news' },
+  { label: t('nav.demo'), icon: FlaskConical, to: '/demo' },
 ])
 
 const isActive = (to: string) => {

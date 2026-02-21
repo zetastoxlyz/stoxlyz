@@ -1,4 +1,4 @@
-import { newsArticles, type NewsArticle } from '@/data/news'
+import { newsArticles, type NewsArticle } from '~/data/news'
 
 export const useNews = () => {
   const getNews = (): NewsArticle[] => {

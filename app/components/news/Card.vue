@@ -3,6 +3,8 @@ import type { NewsArticle } from '@/data/news'
 import { timeAgo } from '@/lib/utils'
 
 defineProps<{ article: NewsArticle }>()
+
+const loaded = ref(false)
 </script>
 
 <template>
@@ -10,7 +12,20 @@ defineProps<{ article: NewsArticle }>()
     :to="`/news/${article.id}`"
     class="flex gap-3 rounded-lg border border-border/50 bg-card/50 p-3 transition-colors hover:bg-accent/20"
   >
-    <div class="h-20 w-20 shrink-0 rounded-lg bg-gradient-to-br from-blue-500/10 to-purple-500/10" />
+    <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg">
+      <div
+        v-if="!loaded"
+        class="absolute inset-0 animate-pulse bg-muted"
+      />
+      <img
+        :src="article.imageUrl"
+        :alt="article.title"
+        class="h-full w-full object-cover transition-opacity duration-300"
+        :class="loaded ? 'opacity-100' : 'opacity-0'"
+        loading="lazy"
+        @load="loaded = true"
+      >
+    </div>
     <div class="flex-1 overflow-hidden">
       <p class="line-clamp-2 text-sm font-medium leading-snug">{{ article.title }}</p>
       <p class="mt-1 line-clamp-1 text-xs text-muted-foreground">{{ article.summary }}</p>

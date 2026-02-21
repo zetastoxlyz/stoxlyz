@@ -9,7 +9,8 @@ Indonesian stock market information platform for retail investors. A modern, res
 - **Watchlist** — Save and sort favorite stocks, persisted in localStorage
 - **News Feed** — Articles categorized by Market, Stocks, Economy, Education
 - **Economic Indicators** — Indonesian macro data in grid and table views
-- **Authentication** — Dummy login/register flow (localStorage-based)
+- **Authentication** — Dummy login/register flow with JWT (HS256, client-side) and role-based access
+- **Role-based routes** — Admin panel restricted to `admin` and `superadmin` roles via named middleware
 - **Theming** — Light, dark, and system modes
 - **i18n** — Bahasa Indonesia (default) and English
 - **Mobile-first** — Bottom nav on mobile, sidebar on desktop
@@ -52,7 +53,9 @@ app/
 │   ├── stocks/[ticker].vue
 │   ├── news/index.vue
 │   ├── news/[id].vue
-│   └── auth/{login,register}.vue
+│   ├── auth/{login,register}.vue
+│   ├── profile.vue
+│   └── admin/index.vue   # Admin panel — requires Admin or Super Admin role
 ├── components/     # Auto-imported components
 │   ├── home/       # Dashboard widgets
 │   ├── stock/      # Stock detail sections
@@ -73,10 +76,19 @@ i18n/locales/
 
 ## Demo Credentials
 
-| Email | Password |
-|-------|----------|
-| `budi@stoxlyz.id` | `password123` |
-| `demo@stoxlyz.id` | `demo123` |
+| Email | Password | Role |
+|-------|----------|------|
+| `super@stoxlyz.id` | `super123` | Super Admin |
+| `budi@stoxlyz.id` | `password123` | Admin |
+| `demo@stoxlyz.id` | `demo123` | User |
+
+Role-based access:
+
+- **User** — access to all public pages (home, watchlist, news, indicators, stocks, profile, settings)
+- **Admin** — same as User + `/admin` panel
+- **Super Admin** — same as Admin (currently identical in the UI)
+
+> The admin panel is at `/admin`, not `/superadmin`.
 
 ## Deployment
 

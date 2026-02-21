@@ -1,5 +1,6 @@
 <script setup lang="ts">
-useHead({ title: 'StoxLyz - Indonesian Stock Market' })
+const { t } = useI18n()
+useHead({ title: computed(() => `${t('home.ihsgComposite')} - StoxLyz`) })
 </script>
 
 <template>

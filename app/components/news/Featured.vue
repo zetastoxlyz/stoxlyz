@@ -3,6 +3,8 @@ import type { NewsArticle } from '@/data/news'
 import { timeAgo } from '@/lib/utils'
 
 defineProps<{ article: NewsArticle }>()
+
+const loaded = ref(false)
 </script>
 
 <template>
@@ -10,7 +12,20 @@ defineProps<{ article: NewsArticle }>()
     :to="`/news/${article.id}`"
     class="block overflow-hidden rounded-xl border border-border/50 bg-card/50 transition-transform hover:scale-[1.01]"
   >
-    <div class="aspect-video w-full bg-gradient-to-br from-blue-500/20 to-purple-500/20" />
+    <div class="relative aspect-video w-full overflow-hidden">
+      <div
+        v-if="!loaded"
+        class="absolute inset-0 animate-pulse bg-muted"
+      />
+      <img
+        :src="article.imageUrl"
+        :alt="article.title"
+        class="h-full w-full object-cover transition-opacity duration-300"
+        :class="loaded ? 'opacity-100' : 'opacity-0'"
+        loading="lazy"
+        @load="loaded = true"
+      >
+    </div>
     <div class="p-4">
       <div class="mb-2 flex items-center gap-2">
         <Badge variant="secondary" class="text-[10px]">{{ article.category }}</Badge>

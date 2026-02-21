@@ -6,7 +6,12 @@
     "indicators": "Indikator",
     "settings": "Pengaturan",
     "login": "Masuk",
-    "logout": "Keluar"
+    "logout": "Keluar",
+    "profile": "Profil",
+    "adminPanel": "Panel Admin",
+    "userMenu": "Menu pengguna",
+    "openSearch": "Buka pencarian",
+    "demo": "Demo"
   },
   "home": {
     "community": "Komunitas",
@@ -52,7 +57,9 @@
     "revenue": "Pendapatan",
     "earnings": "Laba",
     "relatedNews": "Berita Terkait",
-    "relatedStocks": "Saham Terkait"
+    "relatedStocks": "Saham Terkait",
+    "addToWatchlist": "Tambah ke daftar pantau",
+    "removeFromWatchlist": "Hapus dari daftar pantau"
   },
   "watchlist": {
     "title": "Daftar Pantau",
@@ -84,7 +91,9 @@
     "value": "Nilai",
     "previous": "Sebelumnya",
     "change": "Perubahan",
-    "prev": "sblm"
+    "prev": "sblm",
+    "gridView": "Tampilan grid",
+    "tableView": "Tampilan tabel"
   },
   "settings": {
     "title": "Pengaturan",
@@ -122,7 +131,46 @@
     "createPasswordPlaceholder": "Buat kata sandi",
     "creatingAccount": "Membuat akun...",
     "haveAccount": "Sudah punya akun?",
-    "signInLink": "Masuk"
+    "signInLink": "Masuk",
+    "showPassword": "Tampilkan kata sandi",
+    "hidePassword": "Sembunyikan kata sandi",
+    "registerError": "Registrasi gagal. Silakan coba lagi."
+  },
+  "profile": {
+    "title": "Profil",
+    "accountDetails": "Detail Akun",
+    "name": "Nama",
+    "email": "Email",
+    "role": "Peran",
+    "language": "Bahasa",
+    "settings": "Pengaturan",
+    "logout": "Keluar"
+  },
+  "admin": {
+    "title": "Panel Admin",
+    "loggedInAs": "Masuk sebagai",
+    "totalUsers": "Total Pengguna",
+    "activeSessions": "Sesi Aktif",
+    "adminRoles": "Peran Admin",
+    "userManagement": "Manajemen Pengguna",
+    "userManagementDesc": "Semua pengguna terdaftar dan perannya",
+    "colName": "Nama",
+    "colEmail": "Email",
+    "colRole": "Peran",
+    "colStatus": "Status",
+    "statusActive": "aktif"
+  },
+  "demo": {
+    "title": "Demo",
+    "subtitle": "Jelajahi StoxLyz dengan akun bawaan. Klik \"Masuk sebagai\" untuk langsung beralih akun.",
+    "accounts": "Akun Demo",
+    "routes": "Halaman yang Tersedia",
+    "currentSession": "Sesi Aktif",
+    "loginAs": "Masuk sebagai",
+    "copy": "Salin",
+    "accessAll": "Publik",
+    "accessAuth": "Perlu login",
+    "accessAdmin": "Admin saja"
   },
   "disclaimer": {
     "title": "Disclaimer Investasi",

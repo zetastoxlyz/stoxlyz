@@ -1,4 +1,4 @@
-import { stocks, type Stock } from '@/data/stocks'
+import { stocks, type Stock } from '~/data/stocks'
 
 export const useStocks = () => {
   const getStocks = (): Stock[] => {
@@ -34,8 +34,13 @@ export const useStocks = () => {
   }
 
   const getTrendingStocks = (): Stock[] => {
-    const shuffled = [...stocks].sort(() => Math.random() - 0.5)
-    return shuffled.slice(0, 8)
+    // Fisher-Yates shuffle for unbiased random ordering
+    const arr = [...stocks]
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[arr[i], arr[j]] = [arr[j], arr[i]]
+    }
+    return arr.slice(0, 8)
   }
 
   return {

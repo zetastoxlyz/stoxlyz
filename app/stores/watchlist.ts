@@ -10,7 +10,8 @@ export const useWatchlistStore = defineStore('watchlist', () => {
       if (stored) {
         try {
           items.value = JSON.parse(stored)
-        } catch {
+        } catch (err) {
+          console.warn('[watchlist store] Failed to parse watchlist from storage:', err)
           items.value = []
         }
       }

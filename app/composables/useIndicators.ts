@@ -1,4 +1,4 @@
-import { indicators, type EconomicIndicator } from '@/data/indicators'
+import { indicators, type EconomicIndicator } from '~/data/indicators'
 
 export const useIndicators = () => {
   const getIndicators = (): EconomicIndicator[] => {

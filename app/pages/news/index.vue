@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useNews } from '@/composables/useNews'
+import { useNews } from '~/composables/useNews'
 
 const { t } = useI18n()
 
@@ -37,9 +37,9 @@ const articles = computed(() => {
         />
       </div>
 
-      <div v-if="articles.length === 0" class="py-12 text-center text-sm text-muted-foreground">
+      <p v-if="articles.length === 0" class="py-12 text-center text-sm text-muted-foreground">
         {{ $t('news.noArticles') }}
-      </div>
+      </p>
     </div>
   </div>
 </template>

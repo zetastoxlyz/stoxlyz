@@ -1,41 +1,69 @@
 <script setup lang="ts">
-import { ArrowLeft, Clock, ExternalLink } from 'lucide-vue-next'
-import { useNews } from '@/composables/useNews'
-import { newsContent } from '@/data/news-content'
-import { timeAgo } from '@/lib/utils'
+import { ArrowLeft, Clock } from 'lucide-vue-next'
+import { useNews } from '~/composables/useNews'
+import { newsContent } from '~/data/news-content'
+import { timeAgo } from '~/lib/utils'
 
+const localePath = useLocalePath()
 const route = useRoute()
-const router = useRouter()
 const articleId = computed(() => route.params.id as string)
 
 const { getNewsById } = useNews()
 const article = computed(() => getNewsById(articleId.value))
 
+const colorMode = useColorMode()
+const heroLoaded = ref(false)
+
+watch(articleId, () => { heroLoaded.value = false })
+
 useHead({
   title: computed(() => article.value ? `${article.value.title} - StoxLyz` : 'Article Not Found'),
 })
 
-if (!article.value) {
-  throw createError({ statusCode: 404, statusMessage: 'Article not found' })
+watchEffect(() => {
+  if (!article.value) {
+    throw createError({ statusCode: 404, statusMessage: 'Article not found' })
+  }
+})
+
+function goBack() {
+  if (window.history.length > 1) {
+    window.history.back()
+  }
+  else {
+    navigateTo(localePath('/news'))
+  }
 }
 </script>
 
 <template>
   <div v-if="article">
-    <Button variant="ghost" size="sm" class="mb-4 h-8 gap-1 px-2" @click="router.back()">
-      <ArrowLeft class="h-4 w-4" />
+    <Button variant="ghost" size="sm" class="mb-4 h-8 gap-1 px-2" @click="goBack">
+      <ArrowLeft class="h-4 w-4" aria-hidden="true" />
       {{ $t('news.back') }}
     </Button>
 
     <!-- Hero image -->
-    <div class="mb-4 aspect-video w-full rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20" />
+    <div class="relative mb-4 aspect-video w-full overflow-hidden rounded-xl">
+      <div
+        v-if="!heroLoaded"
+        class="absolute inset-0 animate-pulse bg-muted"
+      />
+      <img
+        :src="article.imageUrl"
+        :alt="article.title"
+        class="h-full w-full object-cover transition-opacity duration-300"
+        :class="heroLoaded ? 'opacity-100' : 'opacity-0'"
+        @load="heroLoaded = true"
+      >
+    </div>
 
     <!-- Meta -->
     <div class="mb-3 flex flex-wrap items-center gap-2">
       <Badge>{{ article.category }}</Badge>
       <Badge variant="secondary">{{ article.source }}</Badge>
       <div class="flex items-center gap-1 text-xs text-muted-foreground">
-        <Clock class="h-3 w-3" />
+        <Clock class="h-3 w-3" aria-hidden="true" />
         {{ timeAgo(article.date) }}
       </div>
     </div>
@@ -47,7 +75,7 @@ if (!article.value) {
     <Separator class="my-6" />
 
     <!-- Content -->
-    <div class="prose prose-sm prose-invert max-w-none">
+    <div :class="['prose prose-sm max-w-none', colorMode.value === 'dark' ? 'prose-invert' : '']">
       <p
         v-for="(paragraph, i) in (newsContent[articleId] ?? '').split('\n\n')"
         :key="i"
@@ -59,12 +87,12 @@ if (!article.value) {
 
     <!-- Related tickers -->
     <div v-if="article.relatedTickers.length" class="mt-6">
-      <h3 class="mb-2 text-sm font-semibold">{{ $t('stock.relatedStocks') }}</h3>
+      <h2 class="mb-2 text-sm font-semibold">{{ $t('stock.relatedStocks') }}</h2>
       <div class="flex flex-wrap gap-2">
         <NuxtLink
           v-for="ticker in article.relatedTickers"
           :key="ticker"
-          :to="`/stocks/${ticker}`"
+          :to="localePath(`/stocks/${ticker}`)"
         >
           <Badge variant="outline" class="cursor-pointer hover:bg-accent">
             {{ ticker }}

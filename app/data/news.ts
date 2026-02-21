@@ -17,7 +17,7 @@ export const newsArticles: NewsArticle[] = [
     source: "CNBC Indonesia",
     category: "market",
     date: "2026-02-14T15:30:00.000Z",
-    imageUrl: "/images/news-1.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80",
     relatedTickers: ["BBCA", "BMRI", "BBRI", "BBNI"],
   },
   {
@@ -27,7 +27,7 @@ export const newsArticles: NewsArticle[] = [
     source: "Bisnis.com",
     category: "stocks",
     date: "2026-02-13T10:15:00.000Z",
-    imageUrl: "/images/news-2.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1501167786227-4cba60f6d58f?w=800&q=80",
     relatedTickers: ["ADRO", "PTBA", "ITMG"],
   },
   {
@@ -37,7 +37,7 @@ export const newsArticles: NewsArticle[] = [
     source: "Kontan",
     category: "economy",
     date: "2026-02-12T14:00:00.000Z",
-    imageUrl: "/images/news-3.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=80",
     relatedTickers: ["BBCA", "BBRI", "BMRI", "BBNI"],
   },
   {
@@ -47,7 +47,7 @@ export const newsArticles: NewsArticle[] = [
     source: "IDX Channel",
     category: "stocks",
     date: "2026-02-12T11:45:00.000Z",
-    imageUrl: "/images/news-4.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1624365169364-0640dd10e180?w=800&q=80",
     relatedTickers: ["ANTM", "MDKA"],
   },
   {
@@ -57,7 +57,7 @@ export const newsArticles: NewsArticle[] = [
     source: "CNBC Indonesia",
     category: "economy",
     date: "2026-02-10T09:00:00.000Z",
-    imageUrl: "/images/news-5.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&q=80",
     relatedTickers: [],
   },
   {
@@ -67,7 +67,7 @@ export const newsArticles: NewsArticle[] = [
     source: "Bisnis.com",
     category: "stocks",
     date: "2026-02-11T08:30:00.000Z",
-    imageUrl: "/images/news-6.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
     relatedTickers: ["BBRI"],
   },
   {
@@ -77,7 +77,7 @@ export const newsArticles: NewsArticle[] = [
     source: "Kontan",
     category: "economy",
     date: "2026-02-11T12:00:00.000Z",
-    imageUrl: "/images/news-7.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1580519542036-c47de6196ba5?w=800&q=80",
     relatedTickers: [],
   },
   {
@@ -87,7 +87,7 @@ export const newsArticles: NewsArticle[] = [
     source: "CNBC Indonesia",
     category: "stocks",
     date: "2026-02-10T13:20:00.000Z",
-    imageUrl: "/images/news-8.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80",
     relatedTickers: ["TLKM", "TOWR"],
   },
   {
@@ -97,7 +97,7 @@ export const newsArticles: NewsArticle[] = [
     source: "IDX Channel",
     category: "market",
     date: "2026-02-14T16:00:00.000Z",
-    imageUrl: "/images/news-9.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1642790551116-18e150f248e3?w=800&q=80",
     relatedTickers: ["UNVR", "ICBP", "HMSP", "ADRO", "ANTM", "MDKA"],
   },
   {
@@ -107,7 +107,7 @@ export const newsArticles: NewsArticle[] = [
     source: "Bisnis.com",
     category: "stocks",
     date: "2026-02-09T10:00:00.000Z",
-    imageUrl: "/images/news-10.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80",
     relatedTickers: ["EMTK"],
   },
   {
@@ -117,7 +117,7 @@ export const newsArticles: NewsArticle[] = [
     source: "IDX Channel",
     category: "education",
     date: "2026-02-08T07:00:00.000Z",
-    imageUrl: "/images/news-11.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1434626881859-194d67b2b86f?w=800&q=80",
     relatedTickers: ["BBCA", "BBNI"],
   },
   {
@@ -127,7 +127,7 @@ export const newsArticles: NewsArticle[] = [
     source: "Kontan",
     category: "economy",
     date: "2026-02-07T09:30:00.000Z",
-    imageUrl: "/images/news-12.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80",
     relatedTickers: ["AALI", "LSIP", "CPIN"],
   },
   {
@@ -137,7 +137,7 @@ export const newsArticles: NewsArticle[] = [
     source: "CNBC Indonesia",
     category: "stocks",
     date: "2026-02-06T11:00:00.000Z",
-    imageUrl: "/images/news-13.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80",
     relatedTickers: ["ICBP", "INDF"],
   },
   {
@@ -147,7 +147,7 @@ export const newsArticles: NewsArticle[] = [
     source: "Bisnis.com",
     category: "education",
     date: "2026-02-05T07:30:00.000Z",
-    imageUrl: "/images/news-14.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1638913662252-70efce1e60a7?w=800&q=80",
     relatedTickers: ["BBCA", "BBRI", "TLKM"],
   },
   {
@@ -157,7 +157,7 @@ export const newsArticles: NewsArticle[] = [
     source: "IDX Channel",
     category: "market",
     date: "2026-02-13T15:45:00.000Z",
-    imageUrl: "/images/news-15.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1581087461574-bef5a2e4f476?w=800&q=80",
     relatedTickers: ["ADRO", "PTBA", "PGAS"],
   },
   {
@@ -167,7 +167,7 @@ export const newsArticles: NewsArticle[] = [
     source: "Kontan",
     category: "stocks",
     date: "2026-02-08T10:30:00.000Z",
-    imageUrl: "/images/news-16.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1601597111158-2fceff292cdc?w=800&q=80",
     relatedTickers: ["BRIS"],
   },
   {
@@ -177,7 +177,7 @@ export const newsArticles: NewsArticle[] = [
     source: "CNBC Indonesia",
     category: "economy",
     date: "2026-02-05T09:00:00.000Z",
-    imageUrl: "/images/news-17.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=800&q=80",
     relatedTickers: [],
   },
 ];

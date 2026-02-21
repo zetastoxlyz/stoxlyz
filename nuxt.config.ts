@@ -39,7 +39,6 @@ export default defineNuxtConfig({
   },
 
   app: {
-    baseURL: '/stocksX/',
     head: {
       title: 'StoxLyz - Indonesian Stock Market',
       htmlAttrs: { lang: 'id' },

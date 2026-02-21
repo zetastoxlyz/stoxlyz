@@ -6,7 +6,12 @@
     "indicators": "Indicators",
     "settings": "Settings",
     "login": "Login",
-    "logout": "Logout"
+    "logout": "Logout",
+    "profile": "Profile",
+    "adminPanel": "Admin Panel",
+    "userMenu": "User menu",
+    "openSearch": "Open search",
+    "demo": "Demo"
   },
   "home": {
     "community": "Community",
@@ -52,7 +57,9 @@
     "revenue": "Revenue",
     "earnings": "Earnings",
     "relatedNews": "Related News",
-    "relatedStocks": "Related Stocks"
+    "relatedStocks": "Related Stocks",
+    "addToWatchlist": "Add to watchlist",
+    "removeFromWatchlist": "Remove from watchlist"
   },
   "watchlist": {
     "title": "Watchlist",
@@ -84,7 +91,9 @@
     "value": "Value",
     "previous": "Previous",
     "change": "Change",
-    "prev": "prev"
+    "prev": "prev",
+    "gridView": "Grid view",
+    "tableView": "Table view"
   },
   "settings": {
     "title": "Settings",
@@ -122,7 +131,46 @@
     "createPasswordPlaceholder": "Create a password",
     "creatingAccount": "Creating account...",
     "haveAccount": "Already have an account?",
-    "signInLink": "Sign in"
+    "signInLink": "Sign in",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "registerError": "Registration failed. Please try again."
+  },
+  "profile": {
+    "title": "Profile",
+    "accountDetails": "Account Details",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "language": "Language",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "loggedInAs": "Logged in as",
+    "totalUsers": "Total Users",
+    "activeSessions": "Active Sessions",
+    "adminRoles": "Admin Roles",
+    "userManagement": "User Management",
+    "userManagementDesc": "All registered users and their roles",
+    "colName": "Name",
+    "colEmail": "Email",
+    "colRole": "Role",
+    "colStatus": "Status",
+    "statusActive": "active"
+  },
+  "demo": {
+    "title": "Demo",
+    "subtitle": "Explore StoxLyz with pre-built accounts. Click \"Login as\" to instantly switch accounts.",
+    "accounts": "Demo Accounts",
+    "routes": "Available Routes",
+    "currentSession": "Current Session",
+    "loginAs": "Login as",
+    "copy": "Copy",
+    "accessAll": "Public",
+    "accessAuth": "Login required",
+    "accessAdmin": "Admin only"
   },
   "disclaimer": {
     "title": "Investment Disclaimer",
