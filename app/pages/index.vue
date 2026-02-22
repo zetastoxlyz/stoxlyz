@@ -93,8 +93,8 @@ onMounted(() => {
       <div class="relative mx-auto max-w-4xl px-4 text-center">
         <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-sm text-blue-400">
           <span class="relative flex h-2 w-2">
-            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75" />
-            <span class="relative inline-flex h-2 w-2 rounded-full bg-blue-500" />
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
           </span>
           {{ $t('landing.marketBadge') }}
         </div>
