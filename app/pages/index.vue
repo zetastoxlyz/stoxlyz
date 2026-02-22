@@ -75,8 +75,8 @@ onMounted(() => {
 
         <div class="flex items-center gap-2">
           <NuxtLink :to="localePath('/auth/login')">
-            <Button size="sm" class="gap-1.5">
-              {{ $t('landing.getStarted') }} <ArrowRight class="h-3.5 w-3.5" />
+            <Button size="sm" class="gap-1.5 bg-white text-blue-700 hover:bg-blue-50">
+              {{ $t('landing.getStarted') }}
             </Button>
           </NuxtLink>
         </div>
@@ -90,7 +90,6 @@ onMounted(() => {
         <div class="absolute -top-40 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-blue-500/10 blur-3xl" />
         <div class="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full bg-indigo-500/10 blur-3xl" />
       </div>
-
       <div class="relative mx-auto max-w-4xl px-4 text-center">
         <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-sm text-blue-400">
           <span class="relative flex h-2 w-2">
@@ -111,13 +110,13 @@ onMounted(() => {
 
         <div class="flex flex-col items-center justify-center gap-3 sm:flex-row">
           <NuxtLink :to="localePath('/auth/login')">
-            <Button size="lg" class="gap-2 px-8">
+            <Button size="lg" class="gap-2 px-8 bg-white text-blue-700 hover:bg-blue-50">
               {{ $t('landing.startFree') }}
               <ArrowRight class="h-4 w-4" />
             </Button>
           </NuxtLink>
           <NuxtLink :to="localePath('/auth/login')">
-            <Button variant="outline" size="lg" class="gap-2 px-8">
+            <Button variant="ghost" size="lg" class="gap-2 px-8">
               {{ $t('landing.viewDemo') }}
             </Button>
           </NuxtLink>
@@ -311,7 +310,7 @@ onMounted(() => {
           {{ $t('landing.ctaDesc') }}
         </p>
         <NuxtLink :to="localePath('/auth/login')">
-          <Button size="lg" class="gap-2 px-10">
+          <Button size="lg" class="bg-white text-blue-700 hover:bg-blue-50">
             {{ $t('landing.ctaButton') }}
             <ChevronRight class="h-4 w-4" />
           </Button>
