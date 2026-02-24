@@ -6,6 +6,7 @@ export type Stock = {
   change: number
   changePercent: number
   volume: number
+  frequency: number
   marketCap: number
   pe: number
   pbv: number

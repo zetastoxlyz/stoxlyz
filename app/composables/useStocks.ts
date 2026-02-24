@@ -13,10 +13,10 @@ export const useStocks = () => {
     useApiFetch<Stock[]>('/api/stocks/movers', { query: { type: 'losers', limit } })
 
   const getMostActive = (limit: number = 5) =>
-    useApiFetch<Stock[]>('/api/stocks/movers', { query: { type: 'active', limit } })
+    useApiFetch<Stock[]>('/api/stocks/movers', { query: { type: 'volume', limit } })
 
   const getTrendingStocks = (limit: number = 8) =>
-    useApiFetch<Stock[]>('/api/stocks/movers', { query: { type: 'active', limit } })
+    useApiFetch<Stock[]>('/api/stocks/movers', { query: { type: 'volume', limit } })
 
   return {
     getStocks,

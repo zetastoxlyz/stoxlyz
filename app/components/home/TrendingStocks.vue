@@ -3,7 +3,7 @@ import { Flame } from 'lucide-vue-next'
 import type { Stock } from '@/data/stocks'
 
 const { data: trending, status } = useApiFetch<Stock[]>('/api/stocks/movers', {
-  query: { type: 'active', limit: 8 },
+  query: { type: 'volume', limit: 8 },
 })
 
 const marqueeItems = computed(() => {

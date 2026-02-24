@@ -1,6 +1,6 @@
 import { getAllStocks } from '../../utils/dummy'
 
-type MoverType = 'gainers' | 'losers' | 'active'
+type MoverType = 'gainers' | 'losers' | 'volume' | 'frequency'
 
 export default defineEventHandler((event) => {
   const query = getQuery(event)
@@ -21,7 +21,12 @@ export default defineEventHandler((event) => {
       .sort((a, b) => a.changePercent - b.changePercent)
       .slice(0, limit)
   }
-  // active
+  if (type === 'frequency') {
+    return all
+      .sort((a, b) => b.frequency - a.frequency)
+      .slice(0, limit)
+  }
+  // volume
   return all
     .sort((a, b) => b.volume - a.volume)
     .slice(0, limit)
