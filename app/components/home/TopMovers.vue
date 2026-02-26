@@ -79,7 +79,7 @@ const hoveredIdx = ref<number | null>(null)
       <NuxtLink
         v-for="(stock, i) in currentStocks"
         :key="stock.ticker"
-        :to="`/stocks/${stock.ticker}`"
+        :to="`/stocks/${stock.ticker.replace('.JK', '')}`"
         class="flex items-center gap-3 border-b border-border/20 p-3 transition-all duration-200 last:border-0"
         :class="hoveredIdx === i ? 'bg-accent/40' : 'bg-transparent'"
         @mouseenter="hoveredIdx = i"

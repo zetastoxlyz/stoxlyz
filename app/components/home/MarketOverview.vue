@@ -94,35 +94,5 @@ function formatPrice(val: number) {
     </div>
 
     <!-- Secondary index cards -->
-    <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
-      <template v-if="status === 'pending'">
-        <div v-for="i in 3" :key="i" class="h-20 animate-pulse rounded-xl bg-muted/30" />
-      </template>
-      <template v-else>
-        <div
-          v-for="(item, i) in secondaryIndices"
-          :key="item.ticker"
-          class="group cursor-default rounded-xl border border-border/30 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-border/60 hover:shadow-lg hover:shadow-black/5"
-          :class="visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'"
-          :style="{ transitionDelay: `${(i + 1) * 80}ms` }"
-        >
-          <div class="mb-1.5 flex items-center gap-1.5">
-            <div
-              class="flex h-5 w-5 items-center justify-center rounded-md bg-gradient-to-br"
-              :class="INDEX_META[item.ticker]?.color ?? 'from-zinc-500/20 to-zinc-400/20'"
-            >
-              <component :is="INDEX_META[item.ticker]?.icon ?? Activity" class="h-3 w-3 text-foreground/70" />
-            </div>
-            <span class="text-[10px] font-medium text-muted-foreground">
-              {{ INDEX_META[item.ticker]?.label ?? item.ticker }}
-            </span>
-          </div>
-          <p class="text-base font-bold tabular-nums leading-none sm:text-lg">{{ formatPrice(item.price) }}</p>
-          <p class="mt-1 text-xs font-semibold" :class="item.changePercent >= 0 ? 'text-gain' : 'text-loss'">
-            {{ item.changePercent >= 0 ? '+' : '' }}{{ item.changePercent.toFixed(2) }}%
-          </p>
-        </div>
-      </template>
-    </div>
   </section>
 </template>

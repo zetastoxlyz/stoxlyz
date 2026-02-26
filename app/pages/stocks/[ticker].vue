@@ -10,7 +10,10 @@ const tradingLimitOpen = ref(false)
 const { t } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
-const ticker = computed(() => (route.params.ticker as string).toUpperCase())
+const ticker = computed(() => {
+  const raw = (route.params.ticker as string).toUpperCase()
+  return raw.endsWith('.JK') ? raw : `${raw}.JK`
+})
 
 const stock = computed(() => STOCKS_DATA[ticker.value] ?? null)
 

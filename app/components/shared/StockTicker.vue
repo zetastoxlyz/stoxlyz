@@ -9,7 +9,7 @@ const props = defineProps<{
 
 <template>
   <NuxtLink
-    :to="`/stocks/${stock.ticker}`"
+    :to="`/stocks/${stock.ticker.replace('.JK', '')}`"
     class="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-accent/50"
   >
     <!-- Logo -->

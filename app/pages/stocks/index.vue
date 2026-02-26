@@ -132,7 +132,7 @@ const losers = computed(() => (allStocks.value ?? []).filter((s) => s.changePerc
       <NuxtLink
         v-for="stock in filtered"
         :key="stock.ticker"
-        :to="localePath(`/stocks/${stock.ticker}`)"
+        :to="localePath(`/stocks/${stock.ticker.replace('.JK', '')}`)"
         class="group flex items-center gap-3 rounded-lg border border-border/30 bg-card/50 px-3 py-2.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-border/60 hover:bg-accent/20 hover:shadow-md active:scale-[0.99]"
       >
         <!-- Logo / initials -->

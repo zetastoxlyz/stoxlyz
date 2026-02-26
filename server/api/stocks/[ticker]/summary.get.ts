@@ -1,7 +1,8 @@
 import { DUMMY_STOCKS } from '../../../utils/dummy'
 
 export default defineEventHandler((event) => {
-  const ticker = getRouterParam(event, 'ticker')!
+  const raw = getRouterParam(event, 'ticker')!.toUpperCase()
+  const ticker = raw.endsWith('.JK') ? raw : `${raw}.JK`
   const stock = DUMMY_STOCKS[ticker]
 
   if (!stock) {

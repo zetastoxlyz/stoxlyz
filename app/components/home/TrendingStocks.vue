@@ -43,7 +43,7 @@ const isPaused = ref(false)
         <NuxtLink
           v-for="(stock, i) in marqueeItems"
           :key="`${stock.ticker}-${i}`"
-          :to="`/stocks/${stock.ticker}`"
+          :to="`/stocks/${stock.ticker.replace('.JK', '')}`"
           class="flex shrink-0 items-center gap-2.5 rounded-full border border-border/40 bg-card/60 px-3.5 py-2 transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:bg-accent/40 hover:shadow-md active:scale-95"
         >
           <div class="hidden h-7 w-7 items-center justify-center rounded-full bg-secondary text-[10px] font-bold lg:flex">
