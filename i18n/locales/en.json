@@ -37,8 +37,9 @@
     "stocks": "stocks"
   },
   "search": {
-    "placeholder": "Search news...",
-    "noResults": "No articles found.",
+    "placeholder": "Search stocks or news...",
+    "noResults": "No results found.",
+    "headingStocks": "Stocks",
     "heading": "News"
   },
   "stock": {
@@ -66,10 +67,33 @@
     "badgeInfo": {
       "dayTrade": "Day Trade",
       "dayTradeLabel": "Day Trade {n}x",
-      "dayTradeDesc": "This stock can be bought using Day Trade with up to {n}x your Trading Balance.",
+      "dayTradeDesc": "This stock is available for the Day Trade facility — buying shares that can be sold on the same day without full upfront funds.",
+      "dayTradeMultiplier": "Multiplier",
       "tradingLimit": "Trading Limit",
       "tradingLimitLabel": "Trading Limit",
-      "tradingLimitDesc": "This stock can be bought using Trading Limit and used as collateral with a {n}% haircut."
+      "tradingLimitDesc": "This stock can be used as collateral for the Trading Limit facility — trading credit based on your portfolio value.",
+      "tradingLimitHaircut": "Haircut"
+    },
+    "notation": {
+      "title": "Special Notations",
+      "subtitle": "Notations assigned by the Indonesia Stock Exchange (IDX) to this stock.",
+      "B": "Bankruptcy petition, petition for cancellation of settlement, or in a state of bankruptcy",
+      "M": "Petition for Suspension of Debt Payment Obligations (PKPU)",
+      "E": "Most recent financial statements show negative equity",
+      "A": "Adverse Opinion from the Public Accountant",
+      "D": "Disclaimer of Opinion from the Public Accountant",
+      "L": "Listed company has not yet submitted financial statements",
+      "S": "Most recent financial statements show no operating revenue",
+      "C": "Legal proceedings against the Listed Company, its subsidiaries and/or members of the Board of Directors and Board of Commissioners with Material impact",
+      "Q": "Business activity restrictions on the Listed Company and/or its subsidiaries by a regulator",
+      "Y": "Listed company has not held its Annual General Meeting of Shareholders (AGMS) within 6 months after the end of the fiscal year",
+      "F": "Administrative sanction and/or written order from OJK for a minor capital market regulation violation",
+      "G": "Administrative sanction and/or written order from OJK for a moderate capital market regulation violation",
+      "V": "Administrative sanction and/or written order from OJK for a serious capital market regulation violation",
+      "N": "Listed company implementing Multiple Voting Shares listed on the Main or Development Board",
+      "K": "Listed company implementing Multiple Voting Shares listed on the New Economy Board",
+      "I": "Listed company not implementing Multiple Voting Shares listed on the New Economy Board",
+      "X": "Listed company listed on the Special Monitoring Board"
     }
   },
   "stocks": {

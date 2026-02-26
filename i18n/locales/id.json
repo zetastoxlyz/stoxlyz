@@ -37,8 +37,9 @@
     "stocks": "saham"
   },
   "search": {
-    "placeholder": "Cari berita...",
-    "noResults": "Artikel tidak ditemukan.",
+    "placeholder": "Cari saham atau berita...",
+    "noResults": "Tidak ada hasil ditemukan.",
+    "headingStocks": "Saham",
     "heading": "Berita"
   },
   "stock": {
@@ -66,10 +67,33 @@
     "badgeInfo": {
       "dayTrade": "Day Trade",
       "dayTradeLabel": "Day Trade {n}x",
-      "dayTradeDesc": "Saham ini bisa dibeli dengan Day Trade dengan nilai hingga {n}x Trading Balance kamu.",
+      "dayTradeDesc": "Saham ini tersedia untuk fasilitas Day Trade — pembelian saham yang dapat dijual pada hari yang sama tanpa perlu dana penuh di muka.",
+      "dayTradeMultiplier": "Multiplier",
       "tradingLimit": "Trading Limit",
       "tradingLimitLabel": "Trading Limit",
-      "tradingLimitDesc": "Saham ini bisa dibeli dengan Trading Limit dan dapat dijadikan jaminan dengan haircut {n}%."
+      "tradingLimitDesc": "Saham ini dapat digunakan sebagai jaminan untuk fasilitas Trading Limit — kredit trading berbasis nilai portofolio Anda.",
+      "tradingLimitHaircut": "Haircut"
+    },
+    "notation": {
+      "title": "Notasi Khusus",
+      "subtitle": "Notasi yang diberikan oleh Bursa Efek Indonesia (BEI) kepada saham ini.",
+      "B": "Adanya permohonan Pernyataan Pailit, permohonan pembatalan perdamaian, atau dalam kondisi pailit",
+      "M": "Adanya permohonan Penundaan Kewajiban Pembayaran Utang (PKPU)",
+      "E": "Laporan keuangan terakhir menunjukkan ekuitas negatif",
+      "A": "Adanya Opini Tidak Wajar (Adverse) dari Akuntan Publik",
+      "D": "Adanya Opini \"Tidak Menyatakan Pendapat (Disclaimer)\" dari Akuntan Publik",
+      "L": "Perusahaan Tercatat belum menyampaikan laporan keuangan",
+      "S": "Laporan keuangan terakhir menunjukkan tidak ada pendapatan usaha",
+      "C": "Kejadian perkara hukum terhadap Perusahaan Tercatat, Anak Perusahaan Tercatat dan/atau anggota Direksi dan anggota Dewan Komisaris Perusahaan Tercatat yang berdampak Material",
+      "Q": "Pembatasan kegiatan usaha Perusahaan Tercatat dan/atau anak Perusahaan Tercatat oleh regulator",
+      "Y": "Perusahaan Tercatat yang belum menyelenggarakan Rapat Umum Pemegang Saham Tahunan (RUPST) sampai dengan 6 (enam) bulan setelah tahun buku berakhir",
+      "F": "Sanksi administratif dan/atau perintah tertulis dari OJK — pelanggaran ringan",
+      "G": "Sanksi administratif dan/atau perintah tertulis dari OJK — pelanggaran sedang",
+      "V": "Sanksi administratif dan/atau perintah tertulis dari OJK — pelanggaran berat",
+      "N": "Perusahaan Tercatat yang menerapkan Saham Dengan Hak Suara Multipel dan tercatat di Papan Utama atau Papan Pengembangan",
+      "K": "Perusahaan Tercatat yang menerapkan Saham Dengan Hak Suara Multipel dan tercatat di Papan Ekonomi Baru",
+      "I": "Perusahaan Tercatat yang tidak menerapkan Saham Dengan Hak Suara Multipel dan tercatat di Papan Ekonomi Baru",
+      "X": "Perusahaan Tercatat dicatatkan di Papan Pemantauan Khusus"
     }
   },
   "stocks": {

@@ -12,8 +12,6 @@ export type StockDetail = Stock & {
   prevClose: number
   dayHigh: number
   dayLow: number
-  dayTradeMultiplier?: number
-  tradingLimitHaircut?: number
   notations?: string[]
 }
 
@@ -27,7 +25,7 @@ export const STOCKS_DATA: Record<string, StockDetail> = {
     employees: 24_000, website: 'https://www.bca.co.id', industry: 'Banking', country: 'Indonesia',
     eps: 382, beta: 0.72, avgVolume: 28_000_000,
     openPrice: 9_275, prevClose: 9_275, dayHigh: 9_400, dayLow: 9_250,
-    dayTradeMultiplier: 5, tradingLimitHaircut: 10,
+    notations: ['B'],
   },
   'BBRI.JK': {
     ticker: 'BBRI.JK', name: 'Bank Rakyat Indonesia Tbk', sector: 'Financials',
@@ -38,7 +36,7 @@ export const STOCKS_DATA: Record<string, StockDetail> = {
     employees: 80_000, website: 'https://www.bri.co.id', industry: 'Banking', country: 'Indonesia',
     eps: 317, beta: 1.02, avgVolume: 70_000_000,
     openPrice: 4_220, prevClose: 4_220, dayHigh: 4_230, dayLow: 4_160,
-    dayTradeMultiplier: 5, tradingLimitHaircut: 10,
+    notations: ['B', 'L'],
   },
   'BMRI.JK': {
     ticker: 'BMRI.JK', name: 'Bank Mandiri Tbk', sector: 'Financials',
@@ -49,7 +47,6 @@ export const STOCKS_DATA: Record<string, StockDetail> = {
     employees: 38_000, website: 'https://www.bankmandiri.co.id', industry: 'Banking', country: 'Indonesia',
     eps: 530, beta: 0.98, avgVolume: 40_000_000,
     openPrice: 6_125, prevClose: 6_125, dayHigh: 6_275, dayLow: 6_100,
-    dayTradeMultiplier: 5, tradingLimitHaircut: 10,
   },
   'TLKM.JK': {
     ticker: 'TLKM.JK', name: 'Telkom Indonesia Tbk', sector: 'Infrastructure',
@@ -60,7 +57,7 @@ export const STOCKS_DATA: Record<string, StockDetail> = {
     employees: 27_000, website: 'https://www.telkom.co.id', industry: 'Telecommunications', country: 'Indonesia',
     eps: 190, beta: 0.65, avgVolume: 50_000_000,
     openPrice: 2_775, prevClose: 2_775, dayHigh: 2_790, dayLow: 2_730,
-    dayTradeMultiplier: 3, tradingLimitHaircut: 15,
+    notations: ['M'],
   },
   'ASII.JK': {
     ticker: 'ASII.JK', name: 'Astra International Tbk', sector: 'Consumer Cyclicals',
@@ -71,7 +68,6 @@ export const STOCKS_DATA: Record<string, StockDetail> = {
     employees: 245_000, website: 'https://www.astra.co.id', industry: 'Auto & Truck Manufacturers', country: 'Indonesia',
     eps: 370, beta: 0.88, avgVolume: 20_000_000,
     openPrice: 4_420, prevClose: 4_420, dayHigh: 4_500, dayLow: 4_410,
-    dayTradeMultiplier: 3, tradingLimitHaircut: 15,
   },
   'BYAN.JK': {
     ticker: 'BYAN.JK', name: 'Bayan Resources Tbk', sector: 'Energy',
@@ -112,6 +108,7 @@ export const STOCKS_DATA: Record<string, StockDetail> = {
     employees: 17_000, website: 'https://www.kalbe.co.id', industry: 'Drug Manufacturers', country: 'Indonesia',
     eps: 70, beta: 0.62, avgVolume: 28_000_000,
     openPrice: 1_560, prevClose: 1_560, dayHigh: 1_565, dayLow: 1_540,
+    notations: ['D'],
   },
   'HMSP.JK': {
     ticker: 'HMSP.JK', name: 'H.M. Sampoerna Tbk', sector: 'Consumer Non-Cyclicals',
@@ -122,6 +119,7 @@ export const STOCKS_DATA: Record<string, StockDetail> = {
     employees: 28_000, website: 'https://www.sampoerna.com', industry: 'Tobacco', country: 'Indonesia',
     eps: 44, beta: 0.38, avgVolume: 22_000_000,
     openPrice: 675, prevClose: 675, dayHigh: 685, dayLow: 670,
+    notations: ['X'],
   },
   'GOTO.JK': {
     ticker: 'GOTO.JK', name: 'GoTo Gojek Tokopedia Tbk', sector: 'Technology',
@@ -323,5 +321,16 @@ export const STOCKS_DATA: Record<string, StockDetail> = {
     employees: 2_200, website: 'https://www.tbig.co.id', industry: 'Telecommunications', country: 'Indonesia',
     eps: 120, beta: 0.60, avgVolume: 6_200_000,
     openPrice: 2_420, prevClose: 2_420, dayHigh: 2_470, dayLow: 2_415,
+  },
+  'BUVA.JK': {
+    ticker: 'BUVA.JK', name: 'Bukit Uluwatu Villa Tbk', sector: 'Properties & Real Estate',
+    price: 128, change: -4, changePercent: -3.03,
+    volume: 2_500_000, frequency: 5_556, marketCap: 620_000_000_000,
+    pe: 0, pbv: 0.4, dividendYield: 0,
+    high52w: 210, low52w: 115, about: 'Bukit Uluwatu Villa adalah perusahaan properti yang bergerak di bidang pengembangan dan pengelolaan resor serta vila mewah di Bali.',
+    employees: 850, website: 'https://www.alayabali.com', industry: 'Real Estate', country: 'Indonesia',
+    eps: -12, beta: 0.95, avgVolume: 2_200_000,
+    openPrice: 132, prevClose: 132, dayHigh: 134, dayLow: 126,
+    notations: ['C'],
   },
 }

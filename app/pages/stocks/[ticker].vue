@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { ArrowLeft, ExternalLink, Zap, Shield } from 'lucide-vue-next'
+import { ExternalLink, Bell } from 'lucide-vue-next'
 import { useWatchlistStore } from '~/stores/watchlist'
+import { usePriceAlertStore } from '~/stores/priceAlert'
 import { STOCKS_DATA } from '@/data/stocksData'
 import { StarFilledIcon, StarIcon } from '@radix-icons/vue'
 
-const dayTradeOpen = ref(false)
-const tradingLimitOpen = ref(false)
+const notationOpen = ref(false)
+const priceAlertOpen = ref(false)
 
-const { t } = useI18n()
-const localePath = useLocalePath()
+const priceAlertStore = usePriceAlertStore()
+const hasAlerts = computed(() => stock.value ? priceAlertStore.alertsForTicker(stock.value.ticker).length > 0 : false)
+
 const route = useRoute()
 const ticker = computed(() => {
   const raw = (route.params.ticker as string).toUpperCase()
@@ -34,7 +36,7 @@ const activeTab = ref<Tab>('orderbook')
     <div v-if="!stock" class="py-16 text-center text-sm text-muted-foreground">
       Stock not found
     </div>
-
+    
     <div v-else class="space-y-3">
       <!-- Header -->
       <div>
@@ -43,36 +45,47 @@ const activeTab = ref<Tab>('orderbook')
             <!-- Ticker + badges row -->
             <div class="flex flex-wrap items-center gap-1.5">
               <h1 class="text-xl font-bold">{{ stock.ticker.replace('.JK', '') }}</h1>
-              <button
-                v-if="stock.dayTradeMultiplier"
-                class="flex items-center gap-0.5 rounded px-1 py-0.5 text-amber-500 hover:bg-amber-500/10"
-                aria-label="Day Trade info"
-                @click="dayTradeOpen = true"
+              <!-- Notation pill -->
+              <div
+                v-if="stock.notations?.length"
+                class="flex items-center divide-x divide-border overflow-hidden rounded border border-border/60 text-[11px] font-bold leading-none"
               >
-                <Zap class="h-3.5 w-3.5 fill-current" />
-                <span class="text-[11px] font-bold leading-none">{{ stock.dayTradeMultiplier }}x</span>
-              </button>
-              <button
-                v-if="stock.tradingLimitHaircut"
-                class="flex h-5 w-5 items-center justify-center rounded text-blue-500 hover:bg-blue-500/10"
-                aria-label="Trading Limit info"
-                @click="tradingLimitOpen = true"
-              >
-                <Shield class="h-3.5 w-3.5" />
-              </button>
+                <button
+                  v-for="code in stock.notations"
+                  :key="code"
+                  class="px-1.5 py-1 text-rose-500 hover:bg-rose-500/10"
+                  :aria-label="`Notasi ${code}`"
+                  @click="notationOpen = true"
+                >
+                  {{ code }}
+                </button>
+              </div>
             </div>
             <!-- Company name -->
             <p class="mt-0.5 truncate text-sm text-muted-foreground">{{ stock.name }}</p>
           </div>
-          <a
-            v-if="stock.website"
-            :href="stock.website"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="shrink-0 rounded-md p-1.5 text-muted-foreground hover:text-foreground"
-          >
-            <ExternalLink class="h-4 w-4" />
-          </a>
+          <div class="flex shrink-0 items-center gap-0.5">
+            <button
+              class="relative rounded-md p-1.5 text-red-500"
+              aria-label="Price Alert"
+              @click="priceAlertOpen = true"
+            >
+              <Bell class="h-4 w-4" :class="hasAlerts ? 'text-red-500' : ''" />
+              <span
+                v-if="hasAlerts"
+                class="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-red-500"
+              />
+            </button>
+            <a
+              v-if="stock.website"
+              :href="stock.website"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="rounded-md p-1.5 text-muted-foreground hover:text-foreground"
+            >
+              <ExternalLink class="h-4 w-4" />
+            </a>
+          </div>
         </div>
 
         <!-- Price -->
@@ -135,37 +148,28 @@ const activeTab = ref<Tab>('orderbook')
       <!-- Related news always visible -->
       <StockNews :ticker="stock.ticker" />
 
-      <!-- Day Trade modal -->
-      <Dialog v-model:open="dayTradeOpen">
+      <!-- Notation modal -->
+      <Dialog v-model:open="notationOpen">
         <DialogContent class="left-0 top-auto bottom-0 translate-x-0 translate-y-0 w-full max-w-full rounded-t-2xl rounded-b-none px-4 pb-8 pt-6 data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-left-0 data-[state=closed]:slide-out-to-left-0">
-          <div class="mb-4 flex items-center gap-2">
-            <Zap class="h-5 w-5 fill-current text-amber-500" />
-            <h2 class="text-base font-semibold">Day Trade</h2>
-          </div>
-          <p class="mb-4 text-sm text-muted-foreground">
-            Saham ini tersedia untuk fasilitas <span class="font-medium text-foreground">Day Trade</span> — pembelian saham yang dapat dijual pada hari yang sama tanpa perlu dana penuh di muka.
-          </p>
-          <div class="rounded-lg border border-border/60 bg-muted/40 px-4 py-3">
-            <p class="text-xs text-muted-foreground">Multiplier</p>
-            <p class="text-2xl font-bold text-amber-500">{{ stock?.dayTradeMultiplier }}x</p>
+          <h2 class="mb-1 text-base font-semibold">{{ $t('stock.notation.title') }}</h2>
+          <p class="mb-4 text-xs text-muted-foreground">{{ $t('stock.notation.subtitle') }}</p>
+          <div class="space-y-2">
+            <div
+              v-for="code in stock?.notations"
+              :key="code"
+              class="flex gap-3 rounded-lg border border-rose-500/20 bg-rose-500/5 px-3 py-2.5"
+            >
+              <span class="mt-0.5 shrink-0 text-sm font-bold text-rose-500">{{ code }}</span>
+              <p class="text-sm text-foreground/80">{{ $t(`stock.notation.${code}`) }}</p>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
 
-      <!-- Trading Limit modal -->
-      <Dialog v-model:open="tradingLimitOpen">
+      <!-- Price Alert modal -->
+      <Dialog v-model:open="priceAlertOpen">
         <DialogContent class="left-0 top-auto bottom-0 translate-x-0 translate-y-0 w-full max-w-full rounded-t-2xl rounded-b-none px-4 pb-8 pt-6 data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-left-0 data-[state=closed]:slide-out-to-left-0">
-          <div class="mb-4 flex items-center gap-2">
-            <Shield class="h-5 w-5 text-blue-500" />
-            <h2 class="text-base font-semibold">Trading Limit</h2>
-          </div>
-          <p class="mb-4 text-sm text-muted-foreground">
-            Saham ini dapat digunakan sebagai jaminan untuk fasilitas <span class="font-medium text-foreground">Trading Limit</span> — kredit trading berbasis nilai portofolio Anda.
-          </p>
-          <div class="rounded-lg border border-border/60 bg-muted/40 px-4 py-3">
-            <p class="text-xs text-muted-foreground">Haircut</p>
-            <p class="text-2xl font-bold text-blue-500">{{ stock?.tradingLimitHaircut }}%</p>
-          </div>
+          <StockPriceAlert :ticker="stock.ticker" :price="stock.price" />
         </DialogContent>
       </Dialog>
 

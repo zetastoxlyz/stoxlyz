@@ -8,7 +8,7 @@ useHead({ title: computed(() => `${t('home.ihsgComposite')} - StoxLyz`) })
     <HomeCommunityBanner />
     <HomeMarketOverview />
     <HomeTrendingStocks />
-    <HomeTopMovers />
+    <HomeWatchlist />
     <HomeSectorHeatmap />
     <HomeQuickNews />
   </div>

@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { Search, Newspaper, ExternalLink } from 'lucide-vue-next'
+import { Search, Newspaper, ExternalLink, TrendingUp } from 'lucide-vue-next'
+import { STOCKS_DATA } from '@/data/stocksData'
 
 const { t } = useI18n()
+const localePath = useLocalePath()
+const router = useRouter()
 
 const open = defineModel<boolean>('open', { default: false })
 
@@ -23,10 +26,26 @@ const { data: newsData } = useApiFetch('/api/news', {
 
 const filteredNews = computed(() => (newsData.value as any[]) ?? [])
 
+const filteredStocks = computed(() => {
+  const q = searchQuery.value.trim().toLowerCase()
+  if (!q) return []
+  return Object.values(STOCKS_DATA).filter(
+    (s) =>
+      s.ticker.replace('.JK', '').toLowerCase().includes(q) ||
+      s.name.toLowerCase().includes(q),
+  ).slice(0, 6)
+})
+
 function openArticle(url: string) {
   open.value = false
   searchQuery.value = ''
   window.open(url, '_blank', 'noopener,noreferrer')
+}
+
+function goToStock(ticker: string) {
+  open.value = false
+  searchQuery.value = ''
+  router.push(localePath(`/stocks/${ticker.replace('.JK', '')}`))
 }
 
 onMounted(() => {
@@ -49,6 +68,31 @@ onMounted(() => {
     />
     <CommandList>
       <CommandEmpty>{{ $t('search.noResults') }}</CommandEmpty>
+
+      <!-- Stocks results -->
+      <CommandGroup v-if="filteredStocks.length" :heading="$t('search.headingStocks')">
+        <CommandItem
+          v-for="stock in filteredStocks"
+          :key="stock.ticker"
+          :value="stock.ticker"
+          class="flex cursor-pointer items-center gap-3"
+          @select="goToStock(stock.ticker)"
+        >
+          <TrendingUp class="h-4 w-4 shrink-0 text-muted-foreground" />
+          <div class="flex-1 overflow-hidden">
+            <span class="font-semibold">{{ stock.ticker.replace('.JK', '') }}</span>
+            <span class="ml-2 truncate text-xs text-muted-foreground">{{ stock.name }}</span>
+          </div>
+          <span
+            :class="stock.changePercent >= 0 ? 'text-emerald-500' : 'text-red-500'"
+            class="shrink-0 text-xs font-medium"
+          >
+            {{ stock.changePercent >= 0 ? '+' : '' }}{{ stock.changePercent.toFixed(2) }}%
+          </span>
+        </CommandItem>
+      </CommandGroup>
+
+      <!-- News results -->
       <CommandGroup :heading="$t('search.heading')">
         <CommandItem
           v-for="article in filteredNews"

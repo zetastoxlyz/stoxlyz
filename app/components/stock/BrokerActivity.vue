@@ -351,8 +351,8 @@ function fmtBAvg(v: number) { return v.toLocaleString('id-ID') }
         <button
           class="flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors hover:bg-accent/30"
           :class="isCustomRange
-            ? 'border-emerald-500/40 text-emerald-400'
-            : 'border-border/50 text-emerald-400'"
+            ? 'border-blue-500/40 text-blue-400'
+            : 'border-border/50 text-blue-400'"
           @click.stop="showCalendar = !showCalendar"
         >
           <span>{{ dateLabel }}</span>
@@ -384,7 +384,7 @@ function fmtBAvg(v: number) { return v.toLocaleString('id-ID') }
             v-model.range="dateRange"
             :columns="2"
             :max-date="TODAY"
-            color="green"
+            color="blue"
             is-dark
             @update:model-value="onCalendarUpdate"
           />
