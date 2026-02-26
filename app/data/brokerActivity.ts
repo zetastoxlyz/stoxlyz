@@ -117,7 +117,7 @@ export function getBrokerActivity(ticker: string, range: '1D' | '1W' | '1M' | '3
     topBrokers.forEach(broker => {
       // Each 15-min tick: random delta (can be positive or negative)
       const delta = (rng() - 0.45) * baseScale * 0.08
-      cumulative[broker] = parseFloat((cumulative[broker] + delta).toFixed(2))
+      cumulative[broker] = parseFloat(((cumulative[broker] ?? 0) + delta).toFixed(2))
       point[broker] = cumulative[broker]
     })
     return point
@@ -181,8 +181,8 @@ export function getBrokerTable(broker: string, range: '1D' | '1W' | '1M' | '3M' 
   const count = 10
 
   return Array.from({ length: count }, (_, i) => {
-    const buyStock = shuffled[i % shuffled.length]
-    const sellStock = shuffledSell[i % shuffledSell.length]
+    const buyStock = shuffled[i % shuffled.length]!
+    const sellStock = shuffledSell[i % shuffledSell.length]!
     const bAvgPrice = 1000 + rng() * 12000
     const sAvgPrice = 1000 + rng() * 12000
     const bVal = parseFloat((rng() * baseScale * (1 - i * 0.07)).toFixed(2))
@@ -293,8 +293,8 @@ export function getBrokerOverview(range: '1D' | '1W' | '1M' | '3M' | 'YTD' | '1Y
     const totalSVal = parseFloat(stocks.reduce((s, r) => s + r.sVal, 0).toFixed(2))
     const totalBLot = stocks.reduce((s, r) => s + r.bLot, 0)
     const totalSLot = stocks.reduce((s, r) => s + r.sLot, 0)
-    const topBuy = stocks.reduce((a, b) => b.bVal > a.bVal ? b : a, stocks[0])
-    const topSell = stocks.reduce((a, b) => b.sVal > a.sVal ? b : a, stocks[0])
+    const topBuy = stocks.reduce((a, b) => b.bVal > a.bVal ? b : a, stocks[0]!)
+    const topSell = stocks.reduce((a, b) => b.sVal > a.sVal ? b : a, stocks[0]!)
     return {
       broker,
       totalBVal,
@@ -307,6 +307,55 @@ export function getBrokerOverview(range: '1D' | '1W' | '1M' | '3M' | 'YTD' | '1Y
       topSellStock: topSell?.ticker ?? '-',
     }
   }).sort((a, b) => b.totalNetVal - a.totalNetVal)
+}
+
+// Foreign-Domestic activity for a ticker
+export type ForeignDomesticData = {
+  // Value (billions IDR)
+  fBuy: number
+  fSell: number
+  dBuy: number
+  dSell: number
+  netForeign: number
+  // Volume (millions lots)
+  fBuyVol: number
+  fSellVol: number
+  dBuyVol: number
+  dSellVol: number
+  netForeignVol: number
+}
+
+export function getForeignDomestic(
+  ticker: string,
+  range: '1D' | '1W' | '1M' | '3M' | 'YTD' | '1Y' = '1D',
+  market: 'Regular' | 'All Market' = 'Regular',
+): ForeignDomesticData {
+  const seed = tickerSeed(ticker)
+    ^ range.split('').reduce((a, c) => a + c.charCodeAt(0), 0)
+    ^ market.split('').reduce((a, c) => a + c.charCodeAt(0), 0)
+    ^ 0xf0ed
+  const rng = seededRand(seed)
+
+  const baseScale = 100 + rng() * 900  // 100B – 1T IDR
+  const fBuy  = parseFloat((rng() * baseScale * 0.4).toFixed(2))
+  const fSell = parseFloat((rng() * baseScale * 0.5).toFixed(2))
+  const dBuy  = parseFloat((rng() * baseScale).toFixed(2))
+  const dSell = parseFloat((rng() * baseScale * 0.9).toFixed(2))
+
+  // Volume in millions lots (rough: value / avgPrice / 100, scaled to M)
+  const avgPrice = 1000 + rng() * 9000
+  const toVol = (val: number) => parseFloat(((val * 1e9) / (avgPrice * 100) / 1e6).toFixed(2))
+  const fBuyVol  = toVol(fBuy)
+  const fSellVol = toVol(fSell)
+  const dBuyVol  = toVol(dBuy)
+  const dSellVol = toVol(dSell)
+
+  return {
+    fBuy, fSell, dBuy, dSell,
+    netForeign: parseFloat((fBuy - fSell).toFixed(2)),
+    fBuyVol, fSellVol, dBuyVol, dSellVol,
+    netForeignVol: parseFloat((fBuyVol - fSellVol).toFixed(2)),
+  }
 }
 
 // Full broker summary — one row per broker code, all 20 brokers
