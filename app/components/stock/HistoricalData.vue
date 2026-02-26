@@ -92,6 +92,19 @@ function fmtPct(v: number) {
 function fmtValue(vol: number, price: number) {
   return formatCompact(vol * price)
 }
+
+// Derive dummy foreign flow & freq from volume (deterministic, seeded per date)
+function deriveExtras(row: OHLCPoint) {
+  const seed = row.date.split('').reduce((a, c) => a + c.charCodeAt(0), 0)
+  const r = (n: number) => ((seed * (n + 1) * 1664525 + 1013904223) & 0x7fffffff) / 0x7fffffff
+  const fBuyRatio = 0.2 + r(1) * 0.6
+  const fBuy = Math.round(row.volume * fBuyRatio * row.close)
+  const fSell = Math.round(row.volume * (1 - fBuyRatio) * r(2) * 0.8 * row.close)
+  const nForeign = fBuy - fSell
+  const freq = Math.round(row.volume * (0.005 + r(3) * 0.02))
+  const avg = Math.round((row.open + row.high + row.low + row.close) / 4)
+  return { fBuy, fSell, nForeign, freq, avg }
+}
 </script>
 
 <template>
@@ -118,11 +131,19 @@ function fmtValue(vol: number, price: number) {
       <table class="w-full text-[11px]">
         <thead>
           <tr class="border-b border-border/40 text-muted-foreground">
-            <th class="px-3 py-2 text-left font-medium">Date</th>
-            <th class="px-3 py-2 text-right font-medium">Close</th>
-            <th class="px-3 py-2 text-right font-medium">Change</th>
+            <th class="sticky left-0 bg-card px-3 py-2 text-left font-medium">Date</th>
             <th class="px-3 py-2 text-right font-medium">Value</th>
             <th class="px-3 py-2 text-right font-medium">Volume</th>
+            <th class="px-3 py-2 text-right font-medium">Freq</th>
+            <th class="px-3 py-2 text-right font-medium">F Buy</th>
+            <th class="px-3 py-2 text-right font-medium">F Sell</th>
+            <th class="px-3 py-2 text-center font-medium">N Foreign</th>
+            <th class="px-3 py-2 text-right font-medium">Open</th>
+            <th class="px-3 py-2 text-right font-medium">High</th>
+            <th class="px-3 py-2 text-right font-medium">Low</th>
+            <th class="px-3 py-2 text-right font-medium">Avg</th>
+            <th class="px-3 py-2 text-right font-medium">Close</th>
+            <th class="px-3 py-2 text-right font-medium">Change</th>
           </tr>
         </thead>
         <tbody>
@@ -131,7 +152,19 @@ function fmtValue(vol: number, price: number) {
             :key="row.date"
             class="border-b border-border/20 hover:bg-accent/20"
           >
-            <td class="px-3 py-2 font-medium text-foreground">{{ fmtDate(row.date) }}</td>
+            <td class="sticky left-0 bg-card px-3 py-2 font-medium text-foreground">{{ fmtDate(row.date) }}</td>
+            <td class="px-3 py-2 text-right text-muted-foreground">{{ fmtValue(row.volume, row.close) }}</td>
+            <td class="px-3 py-2 text-right text-muted-foreground">{{ formatCompact(row.volume) }}</td>
+            <td class="px-3 py-2 text-right text-muted-foreground">{{ formatCompact(deriveExtras(row).freq) }}</td>
+            <td class="px-3 py-2 text-right text-gain">{{ formatCompact(deriveExtras(row).fBuy) }}</td>
+            <td class="px-3 py-2 text-right text-loss">{{ formatCompact(deriveExtras(row).fSell) }}</td>
+            <td class="px-3 py-2 text-right" :class="deriveExtras(row).nForeign >= 0 ? 'text-gain' : 'text-loss'">
+              {{ formatCompact(Math.abs(deriveExtras(row).nForeign)) }}
+            </td>
+            <td class="px-3 py-2 text-right text-muted-foreground">{{ row.open.toLocaleString() }}</td>
+            <td class="px-3 py-2 text-right text-gain">{{ row.high.toLocaleString() }}</td>
+            <td class="px-3 py-2 text-right text-loss">{{ row.low.toLocaleString() }}</td>
+            <td class="px-3 py-2 text-right text-muted-foreground">{{ deriveExtras(row).avg.toLocaleString() }}</td>
             <td class="px-3 py-2 text-right font-semibold" :class="(changeVsRow(i)?.value ?? 0) >= 0 ? 'text-gain' : 'text-loss'">
               {{ row.close.toLocaleString() }}
             </td>
@@ -146,8 +179,6 @@ function fmtValue(vol: number, price: number) {
               </template>
               <span v-else class="text-muted-foreground">—</span>
             </td>
-            <td class="px-3 py-2 text-right text-muted-foreground">{{ fmtValue(row.volume, row.close) }}</td>
-            <td class="px-3 py-2 text-right text-muted-foreground">{{ formatCompact(row.volume / 100) }}L</td>
           </tr>
         </tbody>
       </table>

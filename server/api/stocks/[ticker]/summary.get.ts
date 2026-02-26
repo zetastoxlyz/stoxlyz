@@ -1,13 +1,29 @@
+import { yf } from '../../../utils/yf'
+import { mapYfDetail } from '../../../utils/yfMapper'
 import { DUMMY_STOCKS } from '../../../utils/dummy'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const raw = getRouterParam(event, 'ticker')!.toUpperCase()
   const ticker = raw.endsWith('.JK') ? raw : `${raw}.JK`
-  const stock = DUMMY_STOCKS[ticker]
 
-  if (!stock) {
-    throw createError({ statusCode: 404, statusMessage: `Stock ${ticker} not found` })
+  try {
+    const data = await yf.quoteSummary(ticker, {
+      modules: ['price', 'summaryDetail', 'defaultKeyStatistics', 'assetProfile', 'financialData'],
+    })
+    const q = {
+      ...(data.price ?? {}),
+      ...(data.summaryDetail ?? {}),
+      ...(data.defaultKeyStatistics ?? {}),
+      ...(data.assetProfile ?? {}),
+      ...(data.financialData ?? {}),
+    }
+    return mapYfDetail(ticker, q)
   }
-
-  return stock
+  catch {
+    const stock = DUMMY_STOCKS[ticker]
+    if (!stock) {
+      throw createError({ statusCode: 404, statusMessage: `Stock ${ticker} not found` })
+    }
+    return stock
+  }
 })
