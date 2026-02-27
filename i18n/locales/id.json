@@ -40,7 +40,8 @@
     "placeholder": "Cari saham atau berita...",
     "noResults": "Tidak ada hasil ditemukan.",
     "headingStocks": "Saham",
-    "heading": "Berita"
+    "heading": "Berita",
+    "loading": "Mencari..."
   },
   "stock": {
     "back": "Kembali",

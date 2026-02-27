@@ -40,7 +40,8 @@
     "placeholder": "Search stocks or news...",
     "noResults": "No results found.",
     "headingStocks": "Stocks",
-    "heading": "News"
+    "heading": "News",
+    "loading": "Searching..."
   },
   "stock": {
     "back": "Back",

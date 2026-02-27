@@ -1,45 +1,61 @@
 import { yf } from '../../utils/yf'
 import { mapYfQuote } from '../../utils/yfMapper'
 import { getAllStocks } from '../../utils/dummy'
-import { TICKERS } from '../../../app/data/stocks'
 
 type MoverType = 'gainers' | 'losers' | 'volume' | 'frequency'
+
+const SCREENER_MAP: Record<MoverType, string> = {
+  gainers: 'day_gainers',
+  losers: 'day_losers',
+  volume: 'most_actives',
+  frequency: 'most_actives',
+}
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
   const type = (query.type as MoverType) ?? 'gainers'
   const limit = Number(query.limit ?? 5)
 
-  let all: Awaited<ReturnType<typeof getAllStocks>>
-
   try {
-    const results = await Promise.allSettled(
-      TICKERS.map((ticker) =>
-        yf.quoteSummary(ticker, { modules: ['price', 'summaryDetail', 'defaultKeyStatistics'] })
-          .then((data) => {
-            const q = {
-              ...(data.price ?? {}),
-              ...(data.summaryDetail ?? {}),
-              ...(data.defaultKeyStatistics ?? {}),
-            }
-            return mapYfQuote(ticker, q)
-          })
-      )
-    )
+    const result = await yf.screener(SCREENER_MAP[type], {
+      count: 50,
+      region: 'ID',
+      lang: 'id-ID',
+    })
 
-    all = results
-      .map((r, i) => {
-        if (r.status === 'fulfilled') return r.value
-        return null
-      })
-      .filter(Boolean) as ReturnType<typeof getAllStocks>
+    const quotes = (result.quotes ?? [])
+      .filter((q: any) => q.symbol?.endsWith('.JK'))
+      .map((q: any) => mapYfQuote(q.symbol, q))
 
-    if (all.length === 0) all = getAllStocks()
+    if (quotes.length > 0) {
+      if (type === 'gainers') {
+        return quotes
+          .filter((s) => s.changePercent > 0)
+          .sort((a, b) => b.changePercent - a.changePercent)
+          .slice(0, limit)
+      }
+      if (type === 'losers') {
+        return quotes
+          .filter((s) => s.changePercent < 0)
+          .sort((a, b) => a.changePercent - b.changePercent)
+          .slice(0, limit)
+      }
+      if (type === 'frequency') {
+        return quotes
+          .sort((a, b) => b.frequency - a.frequency)
+          .slice(0, limit)
+      }
+      return quotes
+        .sort((a, b) => b.volume - a.volume)
+        .slice(0, limit)
+    }
   }
   catch {
-    all = getAllStocks()
+    // screener failed or returned no IDX stocks — fall through to dummy
   }
 
+  // Fallback
+  const all = getAllStocks()
   if (type === 'gainers') {
     return all
       .filter((s) => s.changePercent > 0)
@@ -57,7 +73,6 @@ export default defineEventHandler(async (event) => {
       .sort((a, b) => b.frequency - a.frequency)
       .slice(0, limit)
   }
-  // volume
   return all
     .sort((a, b) => b.volume - a.volume)
     .slice(0, limit)

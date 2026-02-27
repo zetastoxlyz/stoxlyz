@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Newspaper, ExternalLink, TrendingUp } from 'lucide-vue-next'
-import { STOCKS_LIST } from '@/data/stocksData'
+import { IDX_STOCKS } from '@/data/idxStocks'
 
 const { t } = useI18n()
 const localePath = useLocalePath()
@@ -9,18 +9,18 @@ const router = useRouter()
 const open = defineModel<boolean>('open', { default: false })
 
 const searchQuery = ref('')
-const debouncedQuery = ref('stock market')
+const debouncedQuery = ref('')
 
 let debounceTimer: ReturnType<typeof setTimeout>
 watch(searchQuery, (val) => {
   clearTimeout(debounceTimer)
   debounceTimer = setTimeout(() => {
-    debouncedQuery.value = val || 'stock market'
+    debouncedQuery.value = val.trim()
   }, 350)
 })
 
 const { data: newsData } = useApiFetch('/api/news', {
-  query: computed(() => ({ q: debouncedQuery.value, limit: 8 })),
+  query: computed(() => ({ q: debouncedQuery.value || 'stock market', limit: 8 })),
   watch: [debouncedQuery],
 })
 
@@ -29,11 +29,9 @@ const filteredNews = computed(() => (newsData.value as any[]) ?? [])
 const filteredStocks = computed(() => {
   const q = searchQuery.value.trim().toLowerCase()
   if (!q) return []
-  return STOCKS_LIST.filter(
-    (s) =>
-      s.ticker.replace('.JK', '').toLowerCase().includes(q) ||
-      s.name.toLowerCase().includes(q),
-  ).slice(0, 6)
+  return IDX_STOCKS.filter(
+    (s) => s.ticker.replace('.JK', '').toLowerCase().includes(q) || s.name.toLowerCase().includes(q),
+  ).slice(0, 10)
 })
 
 function openArticle(url: string) {

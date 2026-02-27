@@ -48,7 +48,6 @@ export default defineEventHandler(async (event) => {
     const { period1, interval, intraday } = getPeriod(range)
 
     if (intraday) {
-      // yf.chart() supports 5m interval; yf.historical() only supports 1d/1wk/1mo
       const result = await yf.chart(ticker, {
         period1,
         period2: new Date(),
@@ -68,16 +67,19 @@ export default defineEventHandler(async (event) => {
         }))
     }
 
-    const rows = await yf.historical(ticker, { period1, period2: new Date(), interval })
-    if (!rows || rows.length === 0) throw new Error('empty')
-    return rows.map((row) => ({
-      time: row.date.toISOString().slice(0, 10),
-      open: row.open,
-      high: row.high,
-      low: row.low,
-      close: row.close,
-      volume: row.volume,
-    }))
+    const result = await yf.chart(ticker, { period1, period2: new Date(), interval })
+    const quotes = result.quotes ?? []
+    if (!quotes.length) throw new Error('empty')
+    return quotes
+      .filter((q) => q.open != null && q.close != null)
+      .map((q) => ({
+        time: new Date(q.date).toISOString().slice(0, 10),
+        open: q.open!,
+        high: q.high!,
+        low: q.low!,
+        close: q.close!,
+        volume: q.volume ?? 0,
+      }))
   }
   catch {
     // Fallback to dummy data

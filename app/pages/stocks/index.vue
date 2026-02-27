@@ -37,15 +37,41 @@ const selectedSector = ref('All')
 type SortKey = 'default' | 'change' | 'price' | 'marketCap' | 'volume'
 const sortBy = ref<SortKey>('default')
 
-const filtered = computed<Stock[]>(() => {
-  let list = allStocks.value ?? []
+const debouncedSearch = ref('')
+let debounceTimer: ReturnType<typeof setTimeout>
+watch(search, (val) => {
+  clearTimeout(debounceTimer)
+  debounceTimer = setTimeout(() => { debouncedSearch.value = val.trim() }, 300)
+})
 
-  if (search.value.trim()) {
-    const q = search.value.toLowerCase()
-    list = list.filter(
+// When search has a query, fetch matching stubs from the full 905-stock list
+const { data: searchResults } = useApiFetch<{ ticker: string; name: string }[]>(
+  '/api/stocks/search',
+  {
+    query: computed(() => ({ q: debouncedSearch.value })),
+    watch: [debouncedSearch],
+  },
+)
+
+const filtered = computed<(Stock | { ticker: string; name: string; _stub?: true })[]>(() => {
+  const q = debouncedSearch.value.toLowerCase()
+
+  if (q) {
+    // Stocks from quotes API that match
+    const liveMatches = (allStocks.value ?? []).filter(
       (s) => s.ticker.toLowerCase().includes(q) || s.name.toLowerCase().includes(q),
     )
+    const liveTickerSet = new Set(liveMatches.map((s) => s.ticker))
+
+    // Stub entries from full IDX list that aren't in the live set
+    const stubs = (searchResults.value ?? [])
+      .filter((r) => !liveTickerSet.has(r.ticker))
+      .map((r) => ({ ...r, _stub: true as const }))
+
+    return [...liveMatches, ...stubs]
   }
+
+  let list = allStocks.value ?? []
 
   if (selectedSector.value !== 'All') {
     list = list.filter((s) => s.sector === selectedSector.value)
@@ -157,19 +183,19 @@ const losers = computed(() => (allStocks.value ?? []).filter((s) => s.changePerc
         <div class="flex-1 overflow-hidden">
           <div class="flex items-center gap-1.5">
             <span class="text-sm font-bold">{{ stock.ticker.replace('.JK', '') }}</span>
-            <Badge variant="secondary" class="hidden text-[9px] px-1 py-0 sm:inline-flex">{{ stock.sector }}</Badge>
+            <Badge v-if="'sector' in stock && stock.sector" variant="secondary" class="hidden text-[9px] px-1 py-0 sm:inline-flex">{{ stock.sector }}</Badge>
           </div>
           <p class="truncate text-xs text-muted-foreground">{{ stock.name }}</p>
         </div>
 
-        <!-- Volume -->
-        <div class="hidden text-right sm:block">
+        <!-- Volume (live stocks only) -->
+        <div v-if="'volume' in stock" class="hidden text-right sm:block">
           <p class="text-[10px] text-muted-foreground">Vol</p>
           <p class="text-xs font-medium">{{ formatCompact(stock.volume) }}</p>
         </div>
 
-        <!-- Price + change -->
-        <div class="text-right">
+        <!-- Price + change (live stocks only) -->
+        <div v-if="'price' in stock" class="text-right">
           <p class="text-sm font-bold">{{ formatNumber(stock.price) }}</p>
           <div
             class="flex items-center justify-end gap-0.5 text-xs font-semibold"
@@ -179,6 +205,10 @@ const losers = computed(() => (allStocks.value ?? []).filter((s) => s.changePerc
             <TrendingDown v-else class="h-3 w-3" />
             {{ stock.changePercent >= 0 ? '+' : '' }}{{ stock.changePercent.toFixed(2) }}%
           </div>
+        </div>
+        <!-- Stub: no price data yet -->
+        <div v-else class="text-right text-xs text-muted-foreground">
+          —
         </div>
 
         <!-- Watchlist toggle -->

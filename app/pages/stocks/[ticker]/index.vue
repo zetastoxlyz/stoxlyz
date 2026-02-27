@@ -17,7 +17,7 @@ const ticker = computed(() => {
   return raw.endsWith('.JK') ? raw : `${raw}.JK`
 })
 
-const { data: liveData } = useApiFetch<StockDetail>(
+const { data: liveData, status } = useApiFetch<StockDetail>(
   () => `/api/stocks/${ticker.value}/summary`,
   { watch: [ticker] },
 )
@@ -45,7 +45,16 @@ const activeTab = ref<Tab>('orderbook')
 
 <template>
   <div>
-    <div v-if="!stock" class="py-16 text-center text-sm text-muted-foreground">
+    <div v-if="status === 'pending'" class="space-y-3">
+      <div class="space-y-1">
+        <Skeleton class="h-7 w-24" />
+        <Skeleton class="h-4 w-48" />
+      </div>
+      <Skeleton class="h-14 w-36" />
+      <Skeleton class="h-48 w-full" />
+    </div>
+
+    <div v-else-if="!stock" class="py-16 text-center text-sm text-muted-foreground">
       Stock not found
     </div>
     
@@ -135,6 +144,14 @@ const activeTab = ref<Tab>('orderbook')
         >
           {{ tab === 'keystats' ? $t('stock.keyStats') : tab === 'orderbook' ? 'Orderbook' : tab === 'tradebook' ? 'Trade Book' : tab === 'about' ? $t('stock.about') : tab === 'broker' ? 'Broker' : tab === 'historical' ? 'Historical' : $t('stock.financials') }}
         </button>
+        <a
+          :href="`/stocks/${stock.ticker.replace('.JK', '')}/chart`"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="shrink-0 border-b-2 border-transparent px-4 py-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground transition-colors hover:text-foreground"
+        >
+          Chart ↗
+        </a>
       </div>
 
       <!-- Tab content -->
