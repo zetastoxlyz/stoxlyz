@@ -394,7 +394,10 @@ function fmtBAvg(v: number) {
   >
     <!-- Header: title + view toggle + All button -->
     <div class="flex items-center justify-between">
-      <h3 class="text-sm font-semibold">{{ $t('stock.brokerActivity.title') }}</h3>
+      <span class="flex items-center gap-1.5">
+        <h3 class="text-sm font-semibold">{{ $t('stock.brokerActivity.title') }}</h3>
+        <span class="rounded border border-amber-500/30 bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-medium text-amber-500/80">Simulated</span>
+      </span>
       <div class="flex items-center gap-2">
         <div class="flex rounded-lg border border-border/50 p-0.5 text-[10px] font-medium">
           <button

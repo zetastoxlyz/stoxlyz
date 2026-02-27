@@ -140,7 +140,7 @@ const activeTab = ref<Tab>("orderbook");
       </div>
 
       <!-- Price Chart -->
-      <StockChart :ticker="stock.ticker" :change-percent="stock.changePercent" />
+      <StockChart :ticker="stock.ticker" :change-percent="stock.changePercent" :day-high="stock.dayHigh" :day-low="stock.dayLow" />
 
       <!-- Section tabs -->
       <div class="flex overflow-x-auto border-b border-border/40 scrollbar-none">

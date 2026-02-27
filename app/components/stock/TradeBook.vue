@@ -182,7 +182,10 @@ const tradeChartOptions = computed<ChartOptions<"line">>(() => ({
   <div class="rounded-2xl border border-border/50 bg-card/80 backdrop-blur-xl overflow-hidden">
     <!-- Header with toggle pills -->
     <div class="flex items-center justify-between border-b border-border/40 px-3 py-2.5">
-      <span class="text-sm font-semibold">{{ $t('stock.tradeBook.title') }}</span>
+      <span class="flex items-center gap-1.5">
+        <span class="text-sm font-semibold">{{ $t('stock.tradeBook.title') }}</span>
+        <span class="rounded border border-amber-500/30 bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-medium text-amber-500/80">Simulated</span>
+      </span>
       <div class="flex gap-1">
         <button
           v-for="v in ([{ value: 'chart', label: $t('stock.tradeBook.viewChart') }, { value: 'time', label: $t('stock.tradeBook.viewByTime') }, { value: 'price', label: $t('stock.tradeBook.viewByPrice') }] as { value: View; label: string }[])"
