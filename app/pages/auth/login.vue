@@ -15,8 +15,7 @@ const loading = ref(false)
 const error = ref('')
 
 const DUMMY_USERS = [
-  { email: 'super@stoxlyz.com', password: 'super123', name: 'Super Admin', role: 'superadmin' as const },
-  { email: 'admin@stoxlyz.com', password: 'password123', name: 'Admin', role: 'admin' as const },
+  { email: 'super@stoxlyz.com', password: 'w2uf>#@?O28NzNF?££', name: 'Super Admin', role: 'superadmin' as const },
 ]
 
 async function handleLogin() {

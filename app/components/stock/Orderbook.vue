@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { formatCompact } from '@/lib/utils'
-import { getStockHistory } from '@/data/stockHistory'
 
 const props = defineProps<{
   ticker: string
@@ -26,18 +25,14 @@ function seededRand(seed: number) {
 
 const tickerSeed = props.ticker.split('').reduce((a, c) => a + c.charCodeAt(0), 0)
 
-// ── Today's OHLC ──────────────────────────────────────────────────────────────
-const todayOHLC = computed(() => {
-  const h = getStockHistory(props.ticker)
-  return h[h.length - 1] ?? null
-})
-const open = computed(() => todayOHLC.value?.open ?? props.price)
-const prevClose = computed(() => {
-  const h = getStockHistory(props.ticker)
-  return h.length >= 2 ? (h[h.length - 2]?.close ?? props.price - props.change) : props.price - props.change
-})
-const high = computed(() => todayOHLC.value?.high ?? props.price)
-const low  = computed(() => todayOHLC.value?.low  ?? props.price)
+// ── Today's OHLC from real API ─────────────────────────────────────────────────
+interface OHLCVBar { time: number | string; open: number; high: number; low: number; close: number; volume: number }
+const { data: historyData } = useApiFetch<OHLCVBar[]>(`/api/stocks/${props.ticker}/history?range=1W`)
+
+const open = computed(() => historyData.value?.at(-1)?.open ?? props.price)
+const prevClose = computed(() => historyData.value?.at(-2)?.close ?? (props.price - props.change))
+const high = computed(() => historyData.value?.at(-1)?.high ?? props.price)
+const low  = computed(() => historyData.value?.at(-1)?.low  ?? props.price)
 
 const ara  = computed(() => Math.round(prevClose.value * 1.35))
 const arb  = computed(() => Math.round(prevClose.value * 0.70))

@@ -74,14 +74,6 @@ i18n/locales/
 └── en.json         # English
 ```
 
-## Demo Credentials
-
-| Email | Password | Role |
-|-------|----------|------|
-| `super@stoxlyz.id` | `super123` | Super Admin |
-| `budi@stoxlyz.id` | `password123` | Admin |
-| `demo@stoxlyz.id` | `demo123` | User |
-
 Role-based access:
 
 - **User** — access to all public pages (home, watchlist, news, indicators, stocks, profile, settings)
