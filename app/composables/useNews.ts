@@ -58,6 +58,21 @@ export const useNews = () => {
 		error.value = null;
 
 		try {
+			const ECON_KEYWORDS = [
+				"saham", "ihsg", "bursa", "investasi", "pasar modal", "rupiah",
+				"inflasi", "suku bunga", "bi rate", "gdp", "ekonomi", "bisnis",
+				"keuangan", "bank", "laba", "pendapatan", "emiten", "ipo",
+				"obligasi", "reksa dana", "devisa", "ekspor", "impor", "neraca",
+				"anggaran", "apbn", "pajak", "bumn", "pdb", "manufaktur",
+				"komoditas", "minyak", "emas", "nikel", "batu bara", "kripto",
+				"fintech", "startup", "merger", "akuisisi", "dividen",
+			];
+
+			const isEconomics = (a: NewsArticle) => {
+				const text = (a.title + " " + a.contentSnippet).toLowerCase();
+				return ECON_KEYWORDS.some((kw) => text.includes(kw));
+			};
+
 			const results = await Promise.allSettled(
 				SOURCES.map(({ url, source }) =>
 					$fetch<ApiResponse>(url).then((res) =>
@@ -68,7 +83,7 @@ export const useNews = () => {
 
 			const merged: NewsArticle[] = [];
 			for (const r of results) {
-				if (r.status === "fulfilled") merged.push(...r.value);
+				if (r.status === "fulfilled") merged.push(...r.value.filter(isEconomics));
 			}
 
 			// Sort newest first
