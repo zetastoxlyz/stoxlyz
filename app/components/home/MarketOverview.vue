@@ -1,18 +1,11 @@
 <script setup lang="ts">
-import { TrendingUp, TrendingDown, Activity } from 'lucide-vue-next'
+import { TrendingUp, TrendingDown } from 'lucide-vue-next'
 
-const { data: indices, status } = useApiFetch('/api/market/indices')
+const { data: indices } = useApiFetch('/api/market/indices')
 
 type IndexItem = { ticker: string; name: string; price: number; change: number; changePercent: number }
 
-const INDEX_META: Record<string, { label: string; icon: typeof Activity; color: string }> = {
-  'IHSG':  { label: 'IHSG',     icon: Activity,   color: 'from-blue-500/20 to-cyan-500/20' },
-  'LQ45':  { label: 'LQ45',     icon: TrendingUp,  color: 'from-emerald-500/20 to-green-500/20' },
-  'IDX30': { label: 'IDX30',    icon: TrendingUp,  color: 'from-violet-500/20 to-purple-500/20' },
-}
-
 const primaryIndex = computed<IndexItem | null>(() => (indices.value as IndexItem[])?.[0] ?? null)
-const secondaryIndices = computed<IndexItem[]>(() => (indices.value as IndexItem[])?.slice(1) ?? [])
 
 // Animated counter for primary index
 const counter = ref(0)
@@ -58,7 +51,7 @@ function formatPrice(val: number) {
           <div class="flex flex-wrap items-end gap-3">
             <div>
               <p class="text-xs text-muted-foreground">
-                {{ INDEX_META[primaryIndex.ticker]?.label ?? primaryIndex.ticker }}
+                IHSG
               </p>
               <p class="text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
                 {{ formatPrice(counter) }}

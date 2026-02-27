@@ -36,6 +36,6 @@ const displayed = computed(() => articles.value.slice(0, 5))
       </a>
     </div>
 
-    <p v-else class="text-xs text-muted-foreground">No news available.</p>
+    <p v-else class="text-xs text-muted-foreground">{{ $t('stock.noNews') }}</p>
   </Card>
 </template>

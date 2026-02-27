@@ -9,7 +9,6 @@ useHead({ title: computed(() => `${t('home.ihsgComposite')} - StoxLyz`) })
     <HomeMarketOverview />
     <HomeTrendingStocks />
     <HomeWatchlist />
-    <HomeSectorHeatmap />
     <HomeQuickNews />
   </div>
 </template>

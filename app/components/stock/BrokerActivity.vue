@@ -36,14 +36,16 @@ const dateRange = ref<{ start: Date; end: Date }>({ start: TODAY, end: TODAY })
 const showCalendar = ref(false)
 const isCustomRange = ref(false)
 
-const PRESETS = [
-  { label: 'Last 1 Day',    range: '1D'  as DataRange },
-  { label: 'Last 7 Days',   range: '1W'  as DataRange },
-  { label: 'Last 1 Month',  range: '1M'  as DataRange },
-  { label: 'Last 3 Months', range: '3M'  as DataRange },
-  { label: 'Year to Date',  range: 'YTD' as DataRange },
-  { label: 'Last 1 Year',   range: '1Y'  as DataRange },
-]
+const { t } = useI18n()
+
+const PRESETS = computed(() => [
+  { label: t('stock.brokerActivity.presetDay'),    range: '1D'  as DataRange },
+  { label: t('stock.brokerActivity.presetWeek'),   range: '1W'  as DataRange },
+  { label: t('stock.brokerActivity.presetMonth'),  range: '1M'  as DataRange },
+  { label: t('stock.brokerActivity.preset3Month'), range: '3M'  as DataRange },
+  { label: t('stock.brokerActivity.presetYTD'),    range: 'YTD' as DataRange },
+  { label: t('stock.brokerActivity.presetYear'),   range: '1Y'  as DataRange },
+])
 
 function applyPreset(r: DataRange) {
   activeDataRange.value = r
@@ -317,19 +319,19 @@ function fmtBAvg(v: number) { return v.toLocaleString('id-ID') }
   >
     <!-- Header: title + view toggle + All button -->
     <div class="flex items-center justify-between">
-      <h3 class="text-sm font-semibold">Broker Activity</h3>
+      <h3 class="text-sm font-semibold">{{ $t('stock.brokerActivity.title') }}</h3>
       <div class="flex items-center gap-2">
         <div class="flex rounded-lg border border-border/50 p-0.5 text-[10px] font-medium">
           <button
             class="rounded-md px-2 py-1 transition-colors"
             :class="viewMode === 'stock' ? 'bg-accent text-foreground' : 'text-muted-foreground hover:text-foreground'"
             @click.stop="viewMode = 'stock'"
-          >By Stock</button>
+          >{{ $t('stock.brokerActivity.byStock') }}</button>
           <button
             class="rounded-md px-2 py-1 transition-colors"
             :class="viewMode === 'broker' ? 'bg-accent text-foreground' : 'text-muted-foreground hover:text-foreground'"
             @click.stop="viewMode = 'broker'"
-          >By Broker</button>
+          >{{ $t('stock.brokerActivity.byBroker') }}</button>
         </div>
         <button
           v-if="viewMode === 'stock'"
@@ -337,7 +339,7 @@ function fmtBAvg(v: number) { return v.toLocaleString('id-ID') }
           @click.stop="showSummary = true"
         >
           <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-          All
+          {{ $t('stock.brokerActivity.all') }}
         </button>
       </div>
     </div>
@@ -407,7 +409,7 @@ function fmtBAvg(v: number) { return v.toLocaleString('id-ID') }
       <!-- Foreign-Domestic Activity -->
       <div class="rounded-xl border border-border/40 bg-card/50 p-3 space-y-3">
         <div class="flex items-center justify-between">
-          <p class="text-xs font-semibold">Foreign-Domestic Activity</p>
+          <p class="text-xs font-semibold">{{ $t('stock.brokerActivity.foreignDomestic') }}</p>
           <div class="flex rounded-lg border border-border/50 p-0.5 text-[10px] font-medium">
             <button
               v-for="m in FD_MARKETS"
@@ -431,16 +433,16 @@ function fmtBAvg(v: number) { return v.toLocaleString('id-ID') }
 
         <div class="grid grid-cols-2 gap-2 text-xs">
           <div class="flex justify-between">
-            <span class="text-muted-foreground">F Buy</span>
+            <span class="text-muted-foreground">{{ $t('stock.brokerActivity.fBuy') }}</span>
             <span class="font-semibold text-cyan-400">{{ fmtFD(fdIsValue ? fdData.fBuy : fdData.fBuyVol, fdIsValue) }}</span>
           </div>
           <div class="flex justify-between">
-            <span class="text-muted-foreground">F Sell</span>
+            <span class="text-muted-foreground">{{ $t('stock.brokerActivity.fSell') }}</span>
             <span class="font-semibold text-red-400">{{ fmtFD(fdIsValue ? fdData.fSell : fdData.fSellVol, fdIsValue) }}</span>
           </div>
         </div>
         <div class="flex items-center justify-between text-xs border-t border-border/30 pt-2">
-          <span class="text-muted-foreground">Net Foreign</span>
+          <span class="text-muted-foreground">{{ $t('stock.brokerActivity.netForeign') }}</span>
           <span
             class="font-bold"
             :class="(fdIsValue ? fdData.netForeign : fdData.netForeignVol) >= 0 ? 'text-cyan-400' : 'text-red-400'"
@@ -452,9 +454,9 @@ function fmtBAvg(v: number) { return v.toLocaleString('id-ID') }
         </div>
 
         <div class="flex items-center gap-4 text-[10px] text-muted-foreground">
-          <span class="flex items-center gap-1"><span class="inline-block h-2 w-2 rounded-sm bg-cyan-500/70" />Foreign</span>
-          <span class="flex items-center gap-1"><span class="inline-block h-2 w-2 rounded-sm bg-violet-600/70" />Domestic</span>
-          <span class="flex items-center gap-1"><span class="inline-block h-2.5 w-2.5 rounded-sm border border-border/60 bg-muted/40 opacity-60" />Buy (light) / Sell (dark)</span>
+          <span class="flex items-center gap-1"><span class="inline-block h-2 w-2 rounded-sm bg-cyan-500/70" />{{ $t('stock.brokerActivity.foreign') }}</span>
+          <span class="flex items-center gap-1"><span class="inline-block h-2 w-2 rounded-sm bg-violet-600/70" />{{ $t('stock.brokerActivity.domestic') }}</span>
+          <span class="flex items-center gap-1"><span class="inline-block h-2.5 w-2.5 rounded-sm border border-border/60 bg-muted/40 opacity-60" />{{ $t('stock.brokerActivity.buyLightSellDark') }}</span>
         </div>
 
         <div class="flex overflow-hidden rounded-lg text-[10px] font-semibold">
@@ -462,14 +464,14 @@ function fmtBAvg(v: number) { return v.toLocaleString('id-ID') }
             class="flex items-center justify-center gap-1 bg-cyan-500/20 py-1.5 text-cyan-400 transition-all"
             :style="{ width: fdForeignPct + '%' }"
           >
-            <span>Foreign</span>
+            <span>{{ $t('stock.brokerActivity.foreign') }}</span>
             <span>{{ fdForeignPct }}%</span>
           </div>
           <div
             class="flex items-center justify-center gap-1 bg-violet-500/20 py-1.5 text-violet-400 transition-all"
             :style="{ width: fdDomesticPct + '%' }"
           >
-            <span>Domestic</span>
+            <span>{{ $t('stock.brokerActivity.domestic') }}</span>
             <span>{{ fdDomesticPct }}%</span>
           </div>
         </div>
@@ -478,7 +480,7 @@ function fmtBAvg(v: number) { return v.toLocaleString('id-ID') }
       <!-- Chart -->
       <div class="rounded-xl border border-border/40 bg-card/50 p-3">
         <p class="mb-2 text-[10px] text-muted-foreground">
-          Net flow · <span class="font-semibold text-foreground">Billion IDR</span>
+          {{ $t('stock.brokerActivity.netFlow') }} · <span class="font-semibold text-foreground">{{ $t('stock.brokerActivity.billionIDR') }}</span>
         </p>
         <div class="h-44 w-full">
           <Line :data="lineChartData" :options="lineChartOptions" />
@@ -490,7 +492,7 @@ function fmtBAvg(v: number) { return v.toLocaleString('id-ID') }
         <table class="w-full text-[10px]">
           <thead>
             <tr class="border-b border-border/40 text-muted-foreground">
-              <th class="px-2 py-1.5 text-left font-medium">BY</th>
+              <th class="px-2 py-1.5 text-left font-medium">{{ $t('stock.brokerActivity.brokerCol') }}</th>
               <th
                 v-for="col in ([
                   { key: 'bVal', label: 'B.val', cls: 'text-emerald-400' },
@@ -507,7 +509,7 @@ function fmtBAvg(v: number) { return v.toLocaleString('id-ID') }
                   <span v-if="sortKey === col.key" class="text-[8px]">{{ sortDir === 'desc' ? '▼' : '▲' }}</span>
                 </span>
               </th>
-              <th class="px-2 py-1.5 text-left font-medium">SL</th>
+              <th class="px-2 py-1.5 text-left font-medium">{{ $t('stock.brokerActivity.stockCol') }}</th>
               <th
                 v-for="col in ([
                   { key: 'sVal', label: 'S.val', cls: 'text-red-400' },
@@ -636,11 +638,11 @@ function fmtBAvg(v: number) { return v.toLocaleString('id-ID') }
         <table class="w-full min-w-[480px] text-[10px]">
           <thead>
             <tr class="border-b border-border/40 text-muted-foreground">
-              <th class="px-2 py-1.5 text-left font-medium">BY</th>
+              <th class="px-2 py-1.5 text-left font-medium">{{ $t('stock.brokerActivity.brokerCol') }}</th>
               <th class="px-2 py-1.5 text-right font-medium text-emerald-400">B.val</th>
               <th class="px-2 py-1.5 text-right font-medium text-emerald-400">B.lot</th>
               <th class="px-2 py-1.5 text-right font-medium text-emerald-400">B.avg</th>
-              <th class="px-2 py-1.5 text-left font-medium">SL</th>
+              <th class="px-2 py-1.5 text-left font-medium">{{ $t('stock.brokerActivity.stockCol') }}</th>
               <th class="px-2 py-1.5 text-right font-medium text-red-400">S.val</th>
               <th class="px-2 py-1.5 text-right font-medium text-red-400">S.lot</th>
               <th class="px-2 py-1.5 text-right font-medium text-red-400">S.avg</th>

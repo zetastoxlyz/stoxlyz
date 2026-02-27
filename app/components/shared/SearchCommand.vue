@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Search, Newspaper, ExternalLink, TrendingUp } from 'lucide-vue-next'
-import { STOCKS_DATA } from '@/data/stocksData'
+import { Newspaper, ExternalLink, TrendingUp } from 'lucide-vue-next'
+import { STOCKS_LIST } from '@/data/stocksData'
 
 const { t } = useI18n()
 const localePath = useLocalePath()
@@ -29,7 +29,7 @@ const filteredNews = computed(() => (newsData.value as any[]) ?? [])
 const filteredStocks = computed(() => {
   const q = searchQuery.value.trim().toLowerCase()
   if (!q) return []
-  return Object.values(STOCKS_DATA).filter(
+  return STOCKS_LIST.filter(
     (s) =>
       s.ticker.replace('.JK', '').toLowerCase().includes(q) ||
       s.name.toLowerCase().includes(q),
@@ -83,12 +83,6 @@ onMounted(() => {
             <span class="font-semibold">{{ stock.ticker.replace('.JK', '') }}</span>
             <span class="ml-2 truncate text-xs text-muted-foreground">{{ stock.name }}</span>
           </div>
-          <span
-            :class="stock.changePercent >= 0 ? 'text-emerald-500' : 'text-red-500'"
-            class="shrink-0 text-xs font-medium"
-          >
-            {{ stock.changePercent >= 0 ? '+' : '' }}{{ stock.changePercent.toFixed(2) }}%
-          </span>
         </CommandItem>
       </CommandGroup>
 

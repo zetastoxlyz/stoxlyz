@@ -166,10 +166,10 @@ const tradeChartOptions = computed<ChartOptions<'line'>>(() => ({
   <div class="rounded-2xl border border-border/50 bg-card/80 backdrop-blur-xl overflow-hidden">
     <!-- Header with toggle pills -->
     <div class="flex items-center justify-between border-b border-border/40 px-3 py-2.5">
-      <span class="text-sm font-semibold">Trade Book</span>
+      <span class="text-sm font-semibold">{{ $t('stock.tradeBook.title') }}</span>
       <div class="flex gap-1">
         <button
-          v-for="v in ([{ value: 'chart', label: 'Chart' }, { value: 'time', label: 'By Time' }, { value: 'price', label: 'By Price' }] as { value: View; label: string }[])"
+          v-for="v in ([{ value: 'chart', label: $t('stock.tradeBook.viewChart') }, { value: 'time', label: $t('stock.tradeBook.viewByTime') }, { value: 'price', label: $t('stock.tradeBook.viewByPrice') }] as { value: View; label: string }[])"
           :key="v.value"
           class="rounded-full px-3 py-1 text-xs font-medium transition-colors"
           :class="activeView === v.value
@@ -190,10 +190,10 @@ const tradeChartOptions = computed<ChartOptions<'line'>>(() => ({
         </div>
         <div class="mt-2 flex justify-center gap-4 text-[10px] text-muted-foreground">
           <span class="flex items-center gap-1.5">
-            <span class="inline-block h-0.5 w-4 rounded-full bg-emerald-400" />Buy
+            <span class="inline-block h-0.5 w-4 rounded-full bg-emerald-400" />{{ $t('stock.tradeBook.buy') }}
           </span>
           <span class="flex items-center gap-1.5">
-            <span class="inline-block h-0.5 w-4 rounded-full bg-rose-400" />Sell
+            <span class="inline-block h-0.5 w-4 rounded-full bg-rose-400" />{{ $t('stock.tradeBook.sell') }}
           </span>
         </div>
       </div>
@@ -205,10 +205,10 @@ const tradeChartOptions = computed<ChartOptions<'line'>>(() => ({
         <table class="w-full text-[11px]">
           <thead>
             <tr class="border-b border-border/40 text-muted-foreground">
-              <th class="px-3 py-2 text-left font-medium">Time</th>
-              <th class="px-3 py-2 text-right font-medium">Price</th>
-              <th class="px-3 py-2 text-right font-medium">Lot</th>
-              <th class="px-3 py-2 text-center font-medium">Type</th>
+              <th class="px-3 py-2 text-left font-medium">{{ $t('stock.tradeBook.time') }}</th>
+              <th class="px-3 py-2 text-right font-medium">{{ $t('stock.tradeBook.price') }}</th>
+              <th class="px-3 py-2 text-right font-medium">{{ $t('stock.tradeBook.lot') }}</th>
+              <th class="px-3 py-2 text-center font-medium">{{ $t('stock.tradeBook.type') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -240,7 +240,7 @@ const tradeChartOptions = computed<ChartOptions<'line'>>(() => ({
         <table class="w-full text-[11px]">
           <thead>
             <tr class="border-b border-border/40 text-muted-foreground">
-              <th class="px-3 py-2 text-right font-medium">Price</th>
+              <th class="px-3 py-2 text-right font-medium">{{ $t('stock.tradeBook.price') }}</th>
               <th class="px-3 py-2 text-right font-medium">T.Lot</th>
               <th class="px-3 py-2 text-right font-medium">T.Freq</th>
               <th class="px-3 py-2 text-right font-medium text-gain">B.Lot</th>

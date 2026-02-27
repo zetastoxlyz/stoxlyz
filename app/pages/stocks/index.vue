@@ -9,6 +9,19 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 useHead({ title: computed(() => `${t('stocks.title')} - StoxLyz`) })
 
+const SECTOR_ID: Record<string, string> = {
+  'All': 'Semua',
+  'Financials': 'Keuangan',
+  'Infrastructure': 'Infrastruktur',
+  'Consumer Cyclicals': 'Konsumer Siklikal',
+  'Consumer Non-Cyclicals': 'Konsumer Primer',
+  'Technology': 'Teknologi',
+  'Energy': 'Energi',
+  'Basic Materials': 'Material Dasar',
+  'Health Care': 'Kesehatan',
+  'Properties & Real Estate': 'Properti',
+}
+
 const watchlistStore = useWatchlistStore()
 
 const { data: allStocks, status } = useApiFetch<Stock[]>('/api/stocks/quotes')
@@ -118,7 +131,7 @@ const losers = computed(() => (allStocks.value ?? []).filter((s) => s.changePerc
           : 'border border-border/50 bg-card/60 text-muted-foreground hover:text-foreground'"
         @click="selectedSector = sector"
       >
-        {{ sector }}
+        {{ SECTOR_ID[sector] ?? sector }}
       </button>
     </div>
 

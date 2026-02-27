@@ -3,13 +3,13 @@ import { ExternalLink, Bell } from 'lucide-vue-next'
 import { useWatchlistStore } from '~/stores/watchlist'
 import { usePriceAlertStore } from '~/stores/priceAlert'
 import { STOCKS_DATA } from '@/data/stocksData'
+import type { StockDetail } from '@/data/stocksData'
 import { StarFilledIcon, StarIcon } from '@radix-icons/vue'
 
 const notationOpen = ref(false)
 const priceAlertOpen = ref(false)
 
 const priceAlertStore = usePriceAlertStore()
-const hasAlerts = computed(() => stock.value ? priceAlertStore.alertsForTicker(stock.value.ticker).length > 0 : false)
 
 const route = useRoute()
 const ticker = computed(() => {
@@ -17,7 +17,19 @@ const ticker = computed(() => {
   return raw.endsWith('.JK') ? raw : `${raw}.JK`
 })
 
-const stock = computed(() => STOCKS_DATA[ticker.value] ?? null)
+const { data: liveData } = useApiFetch<StockDetail>(
+  () => `/api/stocks/${ticker.value}/summary`,
+  { watch: [ticker] },
+)
+
+// Merge live data with static notations from STOCKS_DATA
+const stock = computed<StockDetail | null>(() => {
+  if (!liveData.value) return null
+  const staticEntry = STOCKS_DATA[ticker.value]
+  return { ...liveData.value, notations: staticEntry?.notations }
+})
+
+const hasAlerts = computed(() => stock.value ? priceAlertStore.alertsForTicker(stock.value.ticker).length > 0 : false)
 
 useHead({
   title: computed(() => stock.value ? `${stock.value.ticker.replace('.JK', '')} - ${stock.value.name} - StoxLyz` : 'Stock Not Found'),
@@ -66,11 +78,12 @@ const activeTab = ref<Tab>('orderbook')
           </div>
           <div class="flex shrink-0 items-center gap-0.5">
             <button
-              class="relative rounded-md p-1.5 text-red-500"
+              class="relative flex items-center gap-1.5 rounded-md px-2 py-1.5 text-red-500"
               aria-label="Price Alert"
               @click="priceAlertOpen = true"
             >
               <Bell class="h-4 w-4" :class="hasAlerts ? 'text-red-500' : ''" />
+              <span class="text-xs font-medium">{{ $t('stock.priceAlertBtn') }}</span>
               <span
                 v-if="hasAlerts"
                 class="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-red-500"
@@ -101,7 +114,7 @@ const activeTab = ref<Tab>('orderbook')
               show-icon
               size="md"
             />
-            <span class="text-xs text-muted-foreground">Hari Ini</span>
+            <span class="text-xs text-muted-foreground">{{ $t('stock.today') }}</span>
           </div>
         </div>
       </div>

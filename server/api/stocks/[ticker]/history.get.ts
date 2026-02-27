@@ -3,7 +3,7 @@ import { getStockHistory, filterByRange, type TimeRange } from '../../../../app/
 
 type Range = '5H' | '1D' | '1W' | '1M' | '3M' | 'YTD' | '1Y' | '3Y' | '5Y'
 
-function getPeriod(range: Range): { period1: Date; interval: '5m' | '1h' | '1d' | '1wk'; intraday: boolean } {
+function getPeriod(range: Range): { period1: Date; interval: '5m' | '1d' | '1wk'; intraday: boolean } {
   const now = new Date()
   const p = new Date(now)
 
@@ -46,15 +46,32 @@ export default defineEventHandler(async (event) => {
 
   try {
     const { period1, interval, intraday } = getPeriod(range)
+
+    if (intraday) {
+      // yf.chart() supports 5m interval; yf.historical() only supports 1d/1wk/1mo
+      const result = await yf.chart(ticker, {
+        period1,
+        period2: new Date(),
+        interval: '5m',
+      })
+      const quotes = result.quotes ?? []
+      if (!quotes.length) throw new Error('empty')
+      return quotes
+        .filter((q) => q.open != null && q.close != null)
+        .map((q) => ({
+          time: Math.floor(new Date(q.date).getTime() / 1000),
+          open: q.open!,
+          high: q.high!,
+          low: q.low!,
+          close: q.close!,
+          volume: q.volume ?? 0,
+        }))
+    }
+
     const rows = await yf.historical(ticker, { period1, period2: new Date(), interval })
-
     if (!rows || rows.length === 0) throw new Error('empty')
-
     return rows.map((row) => ({
-      // Intraday: use unix timestamp (seconds) for lightweight-charts time scale
-      time: intraday
-        ? Math.floor(row.date.getTime() / 1000)
-        : row.date.toISOString().slice(0, 10),
+      time: row.date.toISOString().slice(0, 10),
       open: row.open,
       high: row.high,
       low: row.low,

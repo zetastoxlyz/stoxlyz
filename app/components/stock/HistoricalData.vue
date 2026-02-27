@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { getStockHistory, filterByRange } from '@/data/stockHistory'
+import { getStockHistory } from '@/data/stockHistory'
 import type { OHLCPoint } from '@/data/stockHistory'
 import { formatCompact } from '@/lib/utils'
 
 const props = defineProps<{ ticker: string }>()
 
-type Period = 'Daily' | 'Weekly' | 'Monthly'
-const period = ref<Period>('Daily')
-const PERIODS: Period[] = ['Daily', 'Weekly', 'Monthly']
+type Period = 'daily' | 'weekly' | 'monthly'
+const period = ref<Period>('daily')
+const PERIODS: Period[] = ['daily', 'weekly', 'monthly']
 
 const showAll = ref(false)
 const PAGE_SIZE = 15
@@ -60,8 +60,8 @@ function aggregateMonthly(points: OHLCPoint[]): OHLCPoint[] {
 
 const aggregated = computed<OHLCPoint[]>(() => {
   const h = fullHistory.value
-  if (period.value === 'Daily') return [...h].reverse()
-  if (period.value === 'Weekly') return aggregateWeekly(h).reverse()
+  if (period.value === 'daily') return [...h].reverse()
+  if (period.value === 'weekly') return aggregateWeekly(h).reverse()
   return aggregateMonthly(h).reverse()
 })
 
@@ -110,7 +110,7 @@ function deriveExtras(row: OHLCPoint) {
 <template>
   <div class="space-y-3">
     <div class="flex items-center justify-between">
-      <h3 class="text-sm font-semibold">Historical Data</h3>
+      <h3 class="text-sm font-semibold">{{ $t('stock.historical.title') }}</h3>
     </div>
 
     <!-- Period toggle -->
@@ -123,7 +123,7 @@ function deriveExtras(row: OHLCPoint) {
           ? 'bg-blue-500 text-white'
           : 'border border-border/50 text-muted-foreground hover:text-foreground'"
         @click="period = p; showAll = false"
-      >{{ p }}</button>
+      >{{ $t(`stock.historical.${p}`) }}</button>
     </div>
 
     <!-- Table -->
@@ -131,19 +131,19 @@ function deriveExtras(row: OHLCPoint) {
       <table class="w-full text-[11px]">
         <thead>
           <tr class="border-b border-border/40 text-muted-foreground">
-            <th class="sticky left-0 bg-card px-3 py-2 text-left font-medium">Date</th>
-            <th class="px-3 py-2 text-right font-medium">Value</th>
-            <th class="px-3 py-2 text-right font-medium">Volume</th>
-            <th class="px-3 py-2 text-right font-medium">Freq</th>
-            <th class="px-3 py-2 text-right font-medium">F Buy</th>
-            <th class="px-3 py-2 text-right font-medium">F Sell</th>
-            <th class="px-3 py-2 text-center font-medium">N Foreign</th>
-            <th class="px-3 py-2 text-right font-medium">Open</th>
-            <th class="px-3 py-2 text-right font-medium">High</th>
-            <th class="px-3 py-2 text-right font-medium">Low</th>
-            <th class="px-3 py-2 text-right font-medium">Avg</th>
-            <th class="px-3 py-2 text-right font-medium">Close</th>
-            <th class="px-3 py-2 text-right font-medium">Change</th>
+            <th class="sticky left-0 bg-card px-3 py-2 text-left font-medium">{{ $t('stock.historical.date') }}</th>
+            <th class="px-3 py-2 text-right font-medium">{{ $t('stock.historical.value') }}</th>
+            <th class="px-3 py-2 text-right font-medium">{{ $t('stock.volume') }}</th>
+            <th class="px-3 py-2 text-right font-medium">{{ $t('stock.historical.freq') }}</th>
+            <th class="px-3 py-2 text-right font-medium">{{ $t('stock.historical.fBuy') }}</th>
+            <th class="px-3 py-2 text-right font-medium">{{ $t('stock.historical.fSell') }}</th>
+            <th class="px-3 py-2 text-center font-medium">{{ $t('stock.historical.nForeign') }}</th>
+            <th class="px-3 py-2 text-right font-medium">{{ $t('stock.historical.open') }}</th>
+            <th class="px-3 py-2 text-right font-medium">{{ $t('stock.historical.high') }}</th>
+            <th class="px-3 py-2 text-right font-medium">{{ $t('stock.historical.low') }}</th>
+            <th class="px-3 py-2 text-right font-medium">{{ $t('stock.historical.avg') }}</th>
+            <th class="px-3 py-2 text-right font-medium">{{ $t('stock.historical.close') }}</th>
+            <th class="px-3 py-2 text-right font-medium">{{ $t('stock.historical.change') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -190,7 +190,7 @@ function deriveExtras(row: OHLCPoint) {
       class="flex w-full items-center justify-center gap-1 py-1.5 text-xs font-medium text-blue-400 hover:text-blue-300"
       @click="showAll = !showAll"
     >
-      {{ showAll ? 'See Less' : 'See More' }}
+      {{ showAll ? $t('stock.historical.seeLess') : $t('stock.historical.seeMore') }}
       <svg class="h-3.5 w-3.5 transition-transform" :class="showAll ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
     </button>
   </div>

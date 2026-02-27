@@ -5,6 +5,7 @@ import type { AlertCondition } from '~/stores/priceAlert'
 
 const props = defineProps<{ ticker: string; price: number }>()
 
+const { t } = useI18n()
 const store = usePriceAlertStore()
 
 const activeAlerts = computed(() => store.alertsForTicker(props.ticker))
@@ -17,7 +18,7 @@ const error = ref('')
 function submit() {
   const val = Number(targetPrice.value)
   if (!val || val <= 0) {
-    error.value = 'Masukkan harga yang valid'
+    error.value = t('stock.priceAlert.invalidPrice')
     return
   }
   error.value = ''
@@ -33,7 +34,7 @@ function formatDate(ts: number) {
 <template>
   <div>
     <!-- Active alerts -->
-    <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Price Alert</p>
+    <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{{ $t('stock.priceAlert.title') }}</p>
 
     <div v-if="activeAlerts.length" class="mb-3 space-y-2">
       <div
@@ -56,25 +57,25 @@ function formatDate(ts: number) {
     </div>
 
     <div v-else class="mb-3 rounded-lg border border-dashed border-border/60 py-6 text-center text-sm text-muted-foreground">
-      No alert has been set
+      {{ $t('stock.priceAlert.noAlert') }}
     </div>
 
     <!-- Create form -->
     <div class="rounded-lg border border-border/60 bg-muted/20 p-3">
-      <p class="mb-2 text-xs font-semibold text-muted-foreground">+ Create a new alert</p>
+      <p class="mb-2 text-xs font-semibold text-muted-foreground">{{ $t('stock.priceAlert.createNew') }}</p>
       <div class="flex gap-2">
         <select
           v-model="condition"
           class="rounded-md border border-border/60 bg-background px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
         >
-          <option value="above">≥ Above</option>
-          <option value="below">≤ Below</option>
+          <option value="above">{{ $t('stock.priceAlert.above') }}</option>
+          <option value="below">{{ $t('stock.priceAlert.below') }}</option>
         </select>
         <input
           v-model="targetPrice"
           type="number"
           inputmode="numeric"
-          placeholder="Target price"
+          :placeholder="$t('stock.priceAlert.targetPrice')"
           class="min-w-0 flex-1 rounded-md border border-border/60 bg-background px-2.5 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
           @keydown.enter="submit"
         />
@@ -83,18 +84,18 @@ function formatDate(ts: number) {
           @click="submit"
         >
           <Plus class="h-3.5 w-3.5" />
-          Set
+          {{ $t('stock.priceAlert.set') }}
         </button>
       </div>
       <p v-if="error" class="mt-1.5 text-xs text-destructive">{{ error }}</p>
       <p class="mt-1.5 text-xs text-muted-foreground">
-        Current price: <span class="font-medium text-foreground">{{ price.toLocaleString('id-ID') }} IDR</span>
+        {{ $t('stock.priceAlert.currentPrice') }} <span class="font-medium text-foreground">{{ price.toLocaleString('id-ID') }} IDR</span>
       </p>
     </div>
 
     <!-- Alert log -->
     <div class="mt-4">
-      <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Alert Log</p>
+      <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{{ $t('stock.priceAlert.alertLog') }}</p>
       <div v-if="alertLog.length" class="space-y-1.5">
         <div
           v-for="entry in alertLog"
@@ -103,13 +104,13 @@ function formatDate(ts: number) {
         >
           <div>
             <span class="font-medium">{{ entry.condition === 'above' ? '≥' : '≤' }} {{ entry.targetPrice.toLocaleString('id-ID') }} IDR</span>
-            <span class="ml-2 text-muted-foreground">triggered</span>
+            <span class="ml-2 text-muted-foreground">{{ $t('stock.priceAlert.triggered') }}</span>
           </div>
           <span class="text-muted-foreground">{{ formatDate(entry.triggeredAt) }}</span>
         </div>
       </div>
       <div v-else class="rounded-lg border border-dashed border-border/60 py-4 text-center text-xs text-muted-foreground">
-        No log alert found
+        {{ $t('stock.priceAlert.noLog') }}
       </div>
     </div>
   </div>
