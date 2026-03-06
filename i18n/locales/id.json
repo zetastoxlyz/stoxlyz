@@ -147,6 +147,15 @@
 			"tradingLimitDesc": "Saham ini dapat digunakan sebagai jaminan untuk fasilitas Trading Limit — kredit trading berbasis nilai portofolio Anda.",
 			"tradingLimitHaircut": "Haircut"
 		},
+		"ownership": "Kepemilikan",
+		"ownershipData": {
+			"title": "Kepemilikan",
+			"investor": "Investor",
+			"shares": "Saham",
+			"percentage": "%",
+			"value": "Nilai (IDR)",
+			"noData": "Tidak ada data kepemilikan."
+		},
 		"notation": {
 			"title": "Notasi Khusus",
 			"subtitle": "Notasi yang diberikan oleh Bursa Efek Indonesia (BEI) kepada saham ini.",

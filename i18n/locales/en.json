@@ -147,6 +147,15 @@
 			"tradingLimitDesc": "This stock can be used as collateral for the Trading Limit facility — trading credit based on your portfolio value.",
 			"tradingLimitHaircut": "Haircut"
 		},
+		"ownership": "Ownership",
+		"ownershipData": {
+			"title": "Ownership",
+			"investor": "Investor",
+			"shares": "Shares",
+			"percentage": "%",
+			"value": "Value (IDR)",
+			"noData": "No ownership data available."
+		},
 		"notation": {
 			"title": "Special Notations",
 			"subtitle": "Notations assigned by the Indonesia Stock Exchange (IDX) to this stock.",

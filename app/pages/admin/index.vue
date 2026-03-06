@@ -15,19 +15,7 @@ const DUMMY_USERS = [
 		email: "super@stoxlyz.id",
 		role: "superadmin",
 		status: "active",
-	},
-	{
-		name: "Budi Santoso",
-		email: "budi@stoxlyz.id",
-		role: "admin",
-		status: "active",
-	},
-	{
-		name: "Demo User",
-		email: "demo@stoxlyz.id",
-		role: "user",
-		status: "active",
-	},
+	}
 ];
 
 const totalUsers = computed(() => DUMMY_USERS.length);

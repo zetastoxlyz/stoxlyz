@@ -53,6 +53,7 @@ type Tab =
 	| "about"
 	| "financials"
 	| "broker"
+	| "ownership"
 	| "historical";
 const activeTab = ref<Tab>("orderbook");
 </script>
@@ -145,7 +146,7 @@ const activeTab = ref<Tab>("orderbook");
       <!-- Section tabs -->
       <div class="flex overflow-x-auto border-b border-border/40 scrollbar-none">
         <button
-          v-for="tab in (['orderbook', 'tradebook', 'broker', 'historical', 'keystats', 'about', 'financials'] as Tab[])"
+          v-for="tab in (['orderbook', 'tradebook', 'broker', 'ownership', 'historical', 'keystats', 'about', 'financials'] as Tab[])"
           :key="tab"
           class="shrink-0 border-b-2 px-4 py-2 text-xs font-semibold uppercase tracking-wide transition-colors"
           :class="activeTab === tab
@@ -153,7 +154,7 @@ const activeTab = ref<Tab>("orderbook");
             : 'border-transparent text-muted-foreground hover:text-foreground'"
           @click="activeTab = tab"
         >
-          {{ tab === 'keystats' ? $t('stock.keyStats') : tab === 'orderbook' ? 'Orderbook' : tab === 'tradebook' ? 'Trade Book' : tab === 'about' ? $t('stock.about') : tab === 'broker' ? 'Broker' : tab === 'historical' ? 'Historical' : $t('stock.financials') }}
+          {{ tab === 'keystats' ? $t('stock.keyStats') : tab === 'orderbook' ? 'Orderbook' : tab === 'tradebook' ? 'Trade Book' : tab === 'about' ? $t('stock.about') : tab === 'broker' ? 'Broker' : tab === 'ownership' ? $t('stock.ownership') : tab === 'historical' ? 'Historical' : $t('stock.financials') }}
         </button>
         <a
           :href="`/stocks/${stock.ticker.replace('.JK', '')}/chart`"
@@ -182,6 +183,7 @@ const activeTab = ref<Tab>("orderbook");
       <StockTradeBook v-else-if="activeTab === 'tradebook'" :ticker="stock.ticker" :price="stock.price" />
       <StockStats v-else-if="activeTab === 'keystats'" :stock="stock" />
       <StockBrokerActivity v-else-if="activeTab === 'broker'" :ticker="stock.ticker" />
+      <StockOwnership v-else-if="activeTab === 'ownership'" :ticker="stock.ticker" />
       <StockHistoricalData v-else-if="activeTab === 'historical'" :ticker="stock.ticker" />
       <StockAbout v-else-if="activeTab === 'about'" :stock="stock" />
       <StockFinancials v-else-if="activeTab === 'financials'" :stock="stock" />
