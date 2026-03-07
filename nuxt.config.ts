@@ -104,9 +104,6 @@ export default defineNuxtConfig({
 	},
 
 	nitro: {
-		output: {
-			publicDir: "dist",
-		},
 		compressPublicAssets: true,
 		routeRules: {
 			// Allow bfcache on all HTML pages — no no-store
