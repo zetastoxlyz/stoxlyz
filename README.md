@@ -181,12 +181,99 @@ stocksX/
 
 ## 🔐 Authentication & Authorization
 
-The app includes a demo authentication system with role-based access control:
+The app uses **Firebase Authentication** with a hybrid JWT approach:
+
+### Authentication Flow
+1. User signs in via Firebase (Email/Password or Google OAuth)
+2. Firebase ID token is sent to backend for verification
+3. Backend exchanges Firebase token for app JWT
+4. App JWT is stored in localStorage for session management
+5. Protected routes check JWT validity
 
 ### User Roles
 - **User** — Access to all public features (home, watchlist, news, stock details, profile)
 - **Admin** — User privileges + access to `/admin` panel
 - **Super Admin** — Admin privileges with elevated permissions
+
+### Firebase Setup
+
+#### 1. Create Firebase Project
+
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Create a new project or select existing
+3. Enable **Authentication** in the Firebase console
+
+#### 2. Enable Authentication Providers
+
+**Email/Password:**
+- Go to Authentication → Sign-in method
+- Enable "Email/Password"
+
+**Google Sign-In:**
+- Enable "Google" provider
+- Configure OAuth consent screen in Google Cloud Console
+- Add authorized domains (localhost for development, your domain for production)
+
+#### 3. Get Firebase Config
+
+1. Go to Project Settings → General
+2. Scroll to "Your apps" → SDK setup and configuration
+3. Select "CDN" tab or "npm" for config values
+4. Copy the configuration values
+
+#### 4. Configure Environment Variables
+
+Create or update `.env` file in the project root:
+
+```env
+# Firebase Auth Configuration
+NUXT_PUBLIC_FIREBASE_API_KEY="your_api_key_here"
+NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN="your_project.firebaseapp.com"
+NUXT_PUBLIC_FIREBASE_PROJECT_ID="your_project_id"
+NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET="your_project.appspot.com"
+NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="your_sender_id"
+NUXT_PUBLIC_FIREBASE_APP_ID="your_app_id"
+```
+
+#### 5. Backend Firebase Setup
+
+The backend (`backend-data-stocks/`) uses Firebase Admin SDK:
+
+1. Install dependencies:
+   ```bash
+   pip install firebase-admin python-jose[cryptography]
+   ```
+
+2. Set up Firebase Admin credentials:
+   - Download service account key from Firebase Console → Project Settings → Service Accounts
+   - Set environment variable: `GOOGLE_APPLICATION_CREDENTIALS=/path/to/serviceAccountKey.json`
+   - Or use Application Default Credentials in production
+
+3. Configure backend `.env`:
+   ```env
+   DATA_URL=your_data_url
+   JWT_SECRET=your-secret-key-change-in-production
+   JWT_EXPIRE_MINUTES=1440
+   GOOGLE_APPLICATION_CREDENTIALS=/path/to/serviceAccountKey.json
+   ```
+
+### API Endpoints
+
+- `POST /auth/firebase-login` — Login with Firebase ID token
+- `POST /auth/firebase-register` — Register new user with Firebase ID token
+- `POST /token` — OAuth2-compatible endpoint (username/password)
+
+### Migration from Legacy Auth
+
+If you're migrating from the previous JWT-only auth system:
+
+1. **Update user credentials** - Users need to create Firebase accounts
+2. **Update login pages** - Already done in this version
+3. **Test authentication flow** - Verify login/register/logout works
+4. **Update backend** - Deploy new Firebase-enabled backend
+5. **Monitor migration** - Check for auth errors in logs
+
+---
 
 ## 🌐 Internationalization
 

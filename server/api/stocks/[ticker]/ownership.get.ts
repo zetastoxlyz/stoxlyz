@@ -13,7 +13,13 @@ export default defineEventHandler(async (event) => {
 		const res = await $fetch<{
 			share_code: string;
 			count: number;
-			records: { share_code: string; investor_code: string; percentage: number; confidence: number; notes: string | null }[];
+			records: {
+				share_code: string;
+				investor_code: string;
+				percentage: number;
+				confidence: number;
+				notes: string | null;
+			}[];
 		}>(`${baseUrl}/ownership/${ticker}`, {
 			headers: { Authorization: `Bearer ${access_token}` },
 		});

@@ -31,7 +31,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
 });
 
 async function handleLogout() {
-	userStore.logout();
+	await userStore.logoutWithFirebase();
 	await navigateTo(localePath("/auth/login"));
 }
 

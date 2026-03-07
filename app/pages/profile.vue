@@ -10,9 +10,9 @@ useHead({ title: computed(() => `${t("nav.profile")} - StoxLyz`) });
 const localePath = useLocalePath();
 const userStore = useUserStore();
 
-function handleLogout() {
-	userStore.logout();
-	navigateTo(localePath("/auth/login"));
+async function handleLogout() {
+	await userStore.logoutWithFirebase();
+	await navigateTo(localePath("/auth/login"));
 }
 </script>
 

@@ -18,5 +18,8 @@ export default defineEventHandler(async (event) => {
 	const payloadB64 = data.access_token.split(".")[1]!;
 	const decoded = JSON.parse(Buffer.from(payloadB64, "base64url").toString());
 
-	return { response: true, user: { name: decoded.name, email: decoded.sub, role: decoded.role } };
+	return {
+		response: true,
+		user: { name: decoded.name, email: decoded.sub, role: decoded.role },
+	};
 });

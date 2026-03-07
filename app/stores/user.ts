@@ -11,6 +11,15 @@ export interface UserProfile {
 	avatarUrl?: string;
 }
 
+interface AuthResponse {
+	user: {
+		name: string;
+		email: string;
+		role: UserRole;
+		avatarUrl?: string;
+	};
+}
+
 const TOKEN_KEY = "StoxLyz-auth-token";
 const PREFS_KEY = "StoxLyz-user-prefs";
 
@@ -122,11 +131,251 @@ export const useUserStore = defineStore("user", () => {
 		profile.value = value;
 	};
 
-	const logout = () => {
+	const logout = async () => {
 		if (import.meta.client) {
 			localStorage.removeItem(TOKEN_KEY);
+			await $fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
 		}
 		profile.value = null;
+	};
+
+	const setFirebaseUser = (user: {
+		uid: string;
+		email: string;
+		displayName: string;
+		photoURL?: string;
+		role: UserRole;
+	}) => {
+		profile.value = {
+			name: user.displayName || user.email.split("@")[0] || "User",
+			email: user.email,
+			role: user.role,
+			avatarUrl: user.photoURL,
+		};
+	};
+
+	const clearFirebaseUser = () => {
+		profile.value = null;
+	};
+
+	const loginWithFirebase = async (email: string, password: string) => {
+		if (!import.meta.client)
+			return { success: false, error: "Server-side operation not allowed" };
+
+		try {
+			const nuxtApp = useNuxtApp();
+
+			if (!nuxtApp.$firebaseAuth) {
+				console.error(
+					"[Firebase] Firebase not initialized - check your .env configuration",
+				);
+				return {
+					success: false,
+					error:
+						"Firebase not initialized. Please check your configuration in .env file.",
+				};
+			}
+
+			const { signInWithEmailAndPassword } = await import("firebase/auth");
+
+			console.log("[Login] Attempting Firebase login for:", email);
+			const result = await signInWithEmailAndPassword(
+				nuxtApp.$firebaseAuth,
+				email,
+				password,
+			);
+			console.log("[Login] Firebase login successful, UID:", result.user.uid);
+			
+			const idToken = await result.user.getIdToken();
+			console.log("[Login] Got Firebase ID token (length:", idToken.length, ")");
+
+			const config = useRuntimeConfig();
+			const baseUrl =
+				(config.public.STOXLYZ_BASE_URL as string) || "http://127.0.0.1:8000";
+			console.log("[Login] Calling backend at:", `${baseUrl}/auth/firebase-login`);
+
+			const response = await $fetch<AuthResponse>(
+				`${baseUrl}/auth/firebase-login`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${idToken}`,
+					},
+					body: { email, displayName: result.user.displayName || "" },
+				},
+			);
+
+			console.log("[Login] Backend response:", response);
+
+			await setProfile({
+				name: response.user.name,
+				email: response.user.email,
+				role: response.user.role,
+			});
+
+			return { success: true };
+		} catch (err: any) {
+			console.error("[user store] Firebase login failed:", err);
+			console.error("[user store] Error details:", {
+				message: err.message,
+				status: err.status,
+				statusCode: err.statusCode,
+				data: err.data,
+				cause: err.cause,
+			});
+			return {
+				success: false,
+				error: err.message || "Login failed",
+			};
+		}
+	};
+
+	const registerWithFirebase = async (
+		email: string,
+		password: string,
+		displayName: string,
+	) => {
+		if (!import.meta.client)
+			return { success: false, error: "Server-side operation not allowed" };
+
+		try {
+			const nuxtApp = useNuxtApp();
+
+			if (!nuxtApp.$firebaseAuth) {
+				console.error(
+					"[Firebase] Firebase not initialized - check your .env configuration",
+				);
+				return {
+					success: false,
+					error:
+						"Firebase not initialized. Please check your configuration in .env file.",
+				};
+			}
+
+			const { createUserWithEmailAndPassword, updateProfile } = await import(
+				"firebase/auth"
+			);
+
+			const result = await createUserWithEmailAndPassword(
+				nuxtApp.$firebaseAuth,
+				email,
+				password,
+			);
+			await updateProfile(result.user, { displayName });
+			const idToken = await result.user.getIdToken();
+
+			const config = useRuntimeConfig();
+			const baseUrl =
+				(config.public.STOXLYZ_BASE_URL as string) || "http://127.0.0.1:8000";
+
+			const response = await $fetch<AuthResponse>(
+				`${baseUrl}/auth/firebase-register`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${idToken}`,
+					},
+					body: { email, displayName },
+				},
+			);
+
+			await setProfile({
+				name: response.user.name,
+				email: response.user.email,
+				role: response.user.role,
+			});
+
+			return { success: true };
+		} catch (err: any) {
+			console.error("[user store] Firebase registration failed:", err);
+			return {
+				success: false,
+				error: err.message || "Registration failed",
+			};
+		}
+	};
+
+	const loginWithGoogle = async () => {
+		if (!import.meta.client)
+			return { success: false, error: "Server-side operation not allowed" };
+
+		try {
+			const nuxtApp = useNuxtApp();
+
+			if (!nuxtApp.$firebaseAuth) {
+				console.error(
+					"[Firebase] Firebase not initialized - check your .env configuration",
+				);
+				return {
+					success: false,
+					error:
+						"Firebase not initialized. Please check your configuration in .env file.",
+				};
+			}
+
+			const { signInWithPopup, GoogleAuthProvider } = await import(
+				"firebase/auth"
+			);
+
+			const provider = new GoogleAuthProvider();
+			provider.setCustomParameters({ prompt: "select_account" });
+
+			const result = await signInWithPopup(nuxtApp.$firebaseAuth, provider);
+			const idToken = await result.user.getIdToken();
+
+			const config = useRuntimeConfig();
+			const baseUrl =
+				(config.public.STOXLYZ_BASE_URL as string) || "http://127.0.0.1:8000";
+
+			const response = await $fetch<AuthResponse>(
+				`${baseUrl}/auth/firebase-login`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${idToken}`,
+					},
+					body: {
+						email: result.user.email || "",
+						displayName: result.user.displayName || "",
+						photoURL: result.user.photoURL || undefined,
+					},
+				},
+			);
+
+			await setProfile({
+				name: response.user.name,
+				email: response.user.email,
+				role: response.user.role,
+				avatarUrl: response.user.avatarUrl,
+			});
+
+			return { success: true };
+		} catch (err: any) {
+			console.error("[user store] Google login failed:", err);
+			return {
+				success: false,
+				error: err.message || "Google login failed",
+			};
+		}
+	};
+
+	const logoutWithFirebase = async () => {
+		if (!import.meta.client) return;
+
+		try {
+			const nuxtApp = useNuxtApp();
+			if (nuxtApp.$firebaseAuth) {
+				const { signOut } = await import("firebase/auth");
+				await signOut(nuxtApp.$firebaseAuth);
+			}
+		} catch (err) {
+			console.error("[user store] Firebase logout failed:", err);
+		}
+
+		logout();
 	};
 
 	return {
@@ -145,5 +394,11 @@ export const useUserStore = defineStore("user", () => {
 		toggleNotifications,
 		setProfile,
 		logout,
+		loginWithFirebase,
+		registerWithFirebase,
+		loginWithGoogle,
+		logoutWithFirebase,
+		setFirebaseUser,
+		clearFirebaseUser,
 	};
 });

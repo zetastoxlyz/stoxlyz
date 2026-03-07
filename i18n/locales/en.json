@@ -263,7 +263,11 @@
 		"showPassword": "Show password",
 		"hidePassword": "Hide password",
 		"registerError": "Registration failed. Please try again.",
-		"demoAccounts": "or try a demo account"
+		"demoAccounts": "or try a demo account",
+		"orContinueWith": "or continue with",
+		"signInWithGoogle": "Sign in with Google",
+		"googleSignInFailed": "Google sign-in failed. Please try again.",
+		"weakPassword": "Password should be at least 6 characters."
 	},
 	"profile": {
 		"title": "Profile",
