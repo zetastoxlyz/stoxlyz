@@ -3,7 +3,6 @@ export default defineNuxtConfig({
 	compatibilityDate: "2025-07-15",
 	devtools: { enabled: true },
 	ssr: false,
-	debug: true,
 
 	modules: [
 		"@nuxtjs/tailwindcss",
@@ -105,6 +104,9 @@ export default defineNuxtConfig({
 	},
 
 	nitro: {
+		output: {
+			publicDir: "dist",
+		},
 		compressPublicAssets: true,
 		routeRules: {
 			// Allow bfcache on all HTML pages — no no-store
