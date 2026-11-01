@@ -330,5 +330,12 @@
 		"footerSignIn": "Sign in →",
 		"mockTrending": "Trending Now",
 		"mockNews": "Latest News"
+	},
+	"demoNotice": {
+		"badge": "Demo data · Not live",
+		"title": "StoxLyz is still in development",
+		"body": "Some figures, charts, and news on this site are sample data, not real-time, and may differ from actual market conditions.",
+		"warning": "Do not use it as a basis for investment decisions.",
+		"cta": "I understand"
 	}
 }

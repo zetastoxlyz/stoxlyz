@@ -9,4 +9,5 @@ const userStore = useUserStore();
       <NuxtPage v-if="userStore.authReady" />
     </NuxtErrorBoundary>
   </NuxtLayout>
+  <SharedDemoNotice />
 </template>

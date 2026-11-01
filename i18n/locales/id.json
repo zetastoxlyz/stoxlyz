@@ -330,5 +330,12 @@
 		"footerSignIn": "Masuk →",
 		"mockTrending": "Sedang Tren",
 		"mockNews": "Berita Terbaru"
+	},
+	"demoNotice": {
+		"badge": "Data demo · Belum live",
+		"title": "StoxLyz masih dalam tahap pengembangan",
+		"body": "Angka, grafik, dan berita di situs ini sebagian masih data contoh, tidak real-time, dan bisa berbeda dengan kondisi pasar sebenarnya.",
+		"warning": "Jangan gunakan sebagai dasar keputusan investasi.",
+		"cta": "Saya mengerti"
 	}
 }
