@@ -1,30 +1,15 @@
 <script setup lang="ts">
-// Shown once per browser session until the data layer is live and licensed.
-const STORAGE_KEY = "stoxlyz-demo-notice-seen";
-
+// Shown on every page load until the data layer is live and licensed.
 const { t } = useI18n();
 const open = ref(false);
 
 onMounted(() => {
-	try {
-		open.value = sessionStorage.getItem(STORAGE_KEY) !== "1";
-	} catch {
-		open.value = true;
-	}
+	open.value = true;
 });
-
-function dismiss() {
-	open.value = false;
-	try {
-		sessionStorage.setItem(STORAGE_KEY, "1");
-	} catch {
-		// Private mode or blocked storage: the notice simply shows again next visit
-	}
-}
 </script>
 
 <template>
-  <Dialog :open="open" @update:open="(value) => { if (!value) dismiss(); }">
+  <Dialog v-model:open="open">
     <DialogContent class="max-w-md">
       <DialogHeader>
         <span
@@ -40,7 +25,7 @@ function dismiss() {
         </DialogDescription>
       </DialogHeader>
       <DialogFooter>
-        <Button class="w-full sm:w-auto" @click="dismiss">{{ t("demoNotice.cta") }}</Button>
+        <Button class="w-full sm:w-auto" @click="open = false">{{ t("demoNotice.cta") }}</Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>
